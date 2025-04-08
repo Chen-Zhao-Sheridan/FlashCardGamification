@@ -10,6 +10,7 @@ namespace FlashcardGamification.CoreLogic.Interfaces
     public interface IDataService
     {
         // Deck Operations
+        Task<IEnumerable<Deck>> GetAllDecksAsync();
         Task<Deck> GetDeckAsync(Guid deckId); 
         Task SaveDeckAsync(Deck deck);
         Task DeleteDeckAsync(Guid deckId);
