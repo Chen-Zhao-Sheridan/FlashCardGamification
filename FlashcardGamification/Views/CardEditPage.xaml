@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashcardGamification.Views.CardEditPage"
+             xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
+             x:DataType="viewmodels:CardEditViewModel"
+             Title="{Binding Title}">
+    <VerticalStackLayout Padding="10">
+        <Label
+            Text="Card Edit Page Placeholder"
+            VerticalOptions="Center"
+            HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>
+
+    

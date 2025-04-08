@@ -1,5 +1,7 @@
 ﻿using FlashcardGamification.CoreLogic;
 using FlashcardGamification.CoreLogic.Interfaces;
+using FlashcardGamification.ViewModel;
+using FlashcardGamification.Views;
 using Microsoft.Extensions.Logging;
 
 namespace FlashcardGamification
@@ -17,7 +19,22 @@ namespace FlashcardGamification
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // Redister Backend Data
             builder.Services.AddSingleton<IDataService, FileSystemDataService>();
+
+            // Register ViewModels 
+            builder.Services.AddTransient<DeckListViewModel>();
+            builder.Services.AddTransient<DeckEditViewModel>();
+            builder.Services.AddTransient<CardListViewModel>();
+            builder.Services.AddTransient<CardEditViewModel>();
+            builder.Services.AddTransient<StatsViewModel>();
+
+            // Register Views
+            builder.Services.AddTransient<DeckListPage>();
+            builder.Services.AddTransient<DeckEditPage>();
+            builder.Services.AddTransient<CardListPage>();
+            builder.Services.AddTransient<CardEditPage>();
+            builder.Services.AddTransient<StatsPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

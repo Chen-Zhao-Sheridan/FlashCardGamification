@@ -4,12 +4,24 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:FlashcardGamification"
-    Shell.FlyoutBehavior="Flyout"
+    xmlns:views="clr-namespace:FlashcardGamification.Views"
+    Shell.FlyoutBehavior="Disabled"
     Title="FlashcardGamification">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+
+        <ShellContent
+            Title="Stats"
+            ContentTemplate="{DataTemplate views:StatsPage}"
+            Icon="dotnet_bot.png"
+            Route="StatsPage" />
+        
+        <ShellContent
+            Title="Decks"
+            ContentTemplate="{DataTemplate views:DeckListPage}"
+            Icon="dotnet_bot.png" 
+            Route="DeckListPage" />
+
+    </TabBar>
 
 </Shell>

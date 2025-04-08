@@ -33,13 +33,12 @@ namespace FlashcardGamification.CoreLogic
             }
         }
 
-        // --- Helper Method ---
         private string GetDeckFilePath(Guid deckId)
         {
             return Path.Combine(_dataDirectory, $"{DeckFilePrefix}{deckId}{DeckFileExtension}");
         }
 
-        // --- User Operations Implementation ---
+        // User Operations
 
         public async Task<User> GetUserAsync()
         {

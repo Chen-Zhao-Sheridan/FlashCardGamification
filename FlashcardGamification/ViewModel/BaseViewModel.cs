@@ -16,7 +16,7 @@ namespace FlashcardGamification.ViewModel
         [ObservableProperty]
         string title;
 
-        public bool IsNotBusy => !isBusy;
+        public bool IsNotBusy => !IsBusy;
 
     }
 }
