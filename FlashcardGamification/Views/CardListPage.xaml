@@ -3,14 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlashcardGamification.Views.CardListPage"
              xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
+             xmlns:models="clr-namespace:FlashcardGamification.CoreLogic.Models"
              x:DataType="viewmodels:CardListViewModel"
              Title="{Binding Title}">
-    <VerticalStackLayout Padding="10">
-        <Label
-            Text="Card List Page Placeholder"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+	<Grid RowDefinitions="Auto, Auto, *, Auto, Auto">
+
+		<ActivityIndicator Grid.Row="0" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" Margin="10"/>
+
+		<Label Grid.Row="1" Text="{Binding Title}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,10"/>
+
+		<CollectionView Grid.Row="2" ItemsSource="{Binding Cards}" SelectionMode="None" EmptyView="No cards in this deck yet.">
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="models:Card">
+					<Frame Padding="10" Margin="5" BorderColor="LightGray" CornerRadius="5">
+						<Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="5">
+							<!-- Show Front text -->
+							<Label Grid.Column="0" Text="{Binding FrontContent}" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+
+							<!-- Buttons -->
+							<Button Grid.Column="1" Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CardListViewModel}}, Path=GoToEditCardCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
+							<Button Grid.Column="2" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CardListViewModel}}, Path=DeleteCardCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" TextColor="White" FontSize="Small"/>
+						</Grid>
+					</Frame>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Button Grid.Row="3" Text="Add New Card" Command="{Binding GoToCreateCardCommand}" Margin="10"/>
+		<Button Grid.Row="4" Text="Start Review Session" Command="{Binding StartReviewCommand}" FontAttributes="Bold" Margin="10"/>
+
+	</Grid>
 </ContentPage>
 
     

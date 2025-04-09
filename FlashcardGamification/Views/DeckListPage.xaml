@@ -3,15 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlashcardGamification.Views.DeckListPage"
              xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
+             xmlns:models="clr-namespace:FlashcardGamification.CoreLogic.Models"
              x:DataType="viewmodels:DeckListViewModel"
              Title="{Binding Title}">
-    <VerticalStackLayout Padding="10">
-        <Label
-            Text="Deck List Page Placeholder"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-        <!-- Content will be added later -->
-    </VerticalStackLayout>
+	<Grid RowDefinitions="Auto, *, Auto">
+
+		<ActivityIndicator Grid.Row="0" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" Margin="10"/>
+
+		<CollectionView Grid.Row="1" ItemsSource="{Binding Decks}" SelectionMode="None" EmptyView="No decks found. Create one!">
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="models:Deck">
+					<Frame Padding="10" Margin="5" BorderColor="LightGray" CornerRadius="5">
+						<Grid ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="5">
+							<!-- Deck Name and Card Count -->
+							<VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+								<Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium"/>
+								<Label Text="{Binding Cards.Count, StringFormat='{0} Cards'}" FontSize="Small" TextColor="Gray"/>
+							</VerticalStackLayout>
+
+							<!-- Buttons -->
+							<Button Grid.Column="1" Text="Review" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToDeckDetailsCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
+							<Button Grid.Column="2" Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToEditDeckCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
+							<Button Grid.Column="3" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=DeleteDeckCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" TextColor="White" FontSize="Small"/>
+						</Grid>
+					</Frame>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Button Grid.Row="2" Text="Create New Deck" Command="{Binding GoToCreateDeckCommand}" Margin="20"/>
+
+	</Grid>
 </ContentPage>
 
     

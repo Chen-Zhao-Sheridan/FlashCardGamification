@@ -5,12 +5,40 @@
              xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
              x:DataType="viewmodels:StatsViewModel"
              Title="{Binding Title}">
-    <VerticalStackLayout Padding="10">
-        <Label
-            Text="Stats Page Placeholder"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+	<VerticalStackLayout Padding="20" Spacing="10">
+
+		<ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+
+		<Label Text="Overall Stats" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+		<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="5" ColumnSpacing="10">
+
+			<Label Grid.Row="0" Grid.Column="0" Text="User ID:" FontAttributes="Bold"/>
+			<Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentUser.UserId}" LineBreakMode="TailTruncation"/>
+
+			<Label Grid.Row="1" Grid.Column="0" Text="Level:" FontAttributes="Bold"/>
+			<Label Grid.Row="1" Grid.Column="1" Text="{Binding CurrentUser.Level}" />
+
+			<Label Grid.Row="2" Grid.Column="0" Text="XP:" FontAttributes="Bold"/>
+			<Label Grid.Row="2" Grid.Column="1" Text="{Binding CurrentUser.XP}" />
+
+			<Label Grid.Row="3" Grid.Column="0" Text="Current Streak:" FontAttributes="Bold"/>
+			<Label Grid.Row="3" Grid.Column="1" Text="{Binding CurrentUser.CurrentDailyStreak}" />
+
+			<Label Grid.Row="4" Grid.Column="0" Text="Longest Streak:" FontAttributes="Bold"/>
+			<Label Grid.Row="4" Grid.Column="1" Text="{Binding CurrentUser.LongestDailyStreak}" />
+
+			<Label Grid.Row="5" Grid.Column="0" Text="Total Correct:" FontAttributes="Bold"/>
+			<Label Grid.Row="5" Grid.Column="1" Text="{Binding CurrentUser.TotalCorrectAnswers}" />
+
+			<Label Grid.Row="6" Grid.Column="0" Text="Sessions Done:" FontAttributes="Bold"/>
+			<Label Grid.Row="6" Grid.Column="1" Text="{Binding CurrentUser.TotalSessionsCompleted}" />
+
+		</Grid>
+
+		<Button Text="Refresh Stats" Command="{Binding LoadStatsCommand}" IsEnabled="{Binding IsNotBusy}"/>
+
+	</VerticalStackLayout>
 </ContentPage>
 
     

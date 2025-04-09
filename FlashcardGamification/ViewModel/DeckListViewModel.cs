@@ -101,9 +101,9 @@ namespace FlashcardGamification.ViewModel
 
         public void OnAppearing()
         {
-            if (!IsLoading && (Decks == null || !Decks.Any()))
+            if (!IsLoading)
             {
-                Task.Run(async () => await LoadDecksAsync());
+                LoadDecksCommand.Execute(null);
             }
         }
     }

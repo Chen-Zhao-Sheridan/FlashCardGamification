@@ -6,19 +6,18 @@ using FlashcardGamification.CoreLogic.Models;
 
 namespace FlashcardGamification.ViewModel
 {
-    // This attribute links the "DeckId" query parameter from navigation
-    // to the DeckId property in this ViewModel.
-    [QueryProperty(nameof(DeckId), "DeckId")]
+    [QueryProperty(nameof(DeckIdString), "DeckId")]
     public partial class DeckEditViewModel : BaseViewModel
     {
         private readonly IDataService _dataService;
         private Deck _originalDeck; // To hold the deck being edited
+        private Guid _deckId;
 
         [ObservableProperty]
         string deckName;
 
         [ObservableProperty]
-        Guid deckId; // Will be set automaticaly if editing
+        string deckIdString;
 
         [ObservableProperty]
         bool isEditing; // To adjust UI/Title
@@ -30,20 +29,22 @@ namespace FlashcardGamification.ViewModel
         }
 
         // This method is automatically called when the DeckId property changes
-        async partial void OnDeckIdChanged(Guid value)
+        async partial void OnDeckIdStringChanged(string value)
         {
-            if (value != Guid.Empty)
+            IsEditing = Guid.TryParse(value, out _deckId) && _deckId != Guid.Empty;
+
+            if (IsEditing)
             {
-                IsEditing = true;
                 Title = "Edit Deck";
-                await LoadDeckAsync(value);
+                await LoadDeckAsync(_deckId);
             }
             else
             {
-                IsEditing = false;
+                // Reset for new deck 
                 Title = "New Deck";
-                DeckName = string.Empty; // Reset name for new deck
+                DeckName = string.Empty;
                 _originalDeck = null;
+                _deckId = Guid.Empty; 
             }
         }
 
@@ -95,7 +96,7 @@ namespace FlashcardGamification.ViewModel
                 {
                     // Update existing deck
                     _originalDeck.Name = DeckName;
-                    // LastModifiedDate updated in SaveDeckAsync service method
+                    // LastModifiedDate updated in SaveDeckAsync
                     deckToSave = _originalDeck;
                 }
                 else

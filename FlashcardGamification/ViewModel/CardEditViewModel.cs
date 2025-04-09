@@ -10,18 +10,20 @@ using FlashcardGamification.CoreLogic.Models;
 
 namespace FlashcardGamification.ViewModel
 {
-    [QueryProperty(nameof(DeckId), "DeckId")]
-    [QueryProperty(nameof(CardId), "CardId")] // Optional CardId for editing
+    [QueryProperty(nameof(DeckIdString), "DeckId")]
+    [QueryProperty(nameof(CardIdString), "CardId")]
     public partial class CardEditViewModel : BaseViewModel
     {
         private readonly IDataService _dataService;
-        private Card _originalCard; // Card being edited
+        private Card _originalCard; 
+        private Guid _deckId;
+        private Guid _cardId; 
 
         [ObservableProperty]
-        Guid deckId; // Must be provided
+        string deckIdString;
 
         [ObservableProperty]
-        Guid cardId; // Provided if editing
+        string cardIdString;
 
         [ObservableProperty]
         string cardFront;
@@ -38,41 +40,58 @@ namespace FlashcardGamification.ViewModel
             Title = "New Card";
         }
 
-        async partial void OnCardIdChanged(Guid value)
+        partial void OnDeckIdStringChanged(string value)
         {
-            if (value != Guid.Empty)
+            if (!Guid.TryParse(value, out _deckId) || _deckId == Guid.Empty)
             {
-                IsEditing = true;
+                Console.WriteLine($"Error: Invalid or missing DeckId passed to CardEditViewModel: {value}");
+                Shell.Current.DisplayAlert("Error", "Invalid Deck ID received.", "OK");
+                Shell.Current.GoToAsync("..");
+            }
+
+            else if (!string.IsNullOrEmpty(CardIdString))
+            {
+                CheckAndLoadCard();
+            }
+        }
+
+        partial void OnCardIdStringChanged(string value)
+        {
+            IsEditing = Guid.TryParse(value, out _cardId) && _cardId != Guid.Empty;
+
+            if (IsEditing)
+            {
                 Title = "Edit Card";
-                await LoadCardAsync(value);
+                if (_deckId != Guid.Empty)
+                {
+                    CheckAndLoadCard();
+                }
             }
             else
             {
-                IsEditing = false;
                 Title = "New Card";
                 CardFront = string.Empty;
                 CardBack = string.Empty;
                 _originalCard = null;
+                _cardId = Guid.Empty; 
             }
         }
-
-        partial void OnDeckIdChanged(Guid value)
+        private async void CheckAndLoadCard()
         {
-            if (value == Guid.Empty)
+            if (IsEditing && _deckId != Guid.Empty && _cardId != Guid.Empty)
             {
-                Console.WriteLine("Error: DeckId not provided to CardEditViewModel");
+                await LoadCardAsync(_deckId, _cardId);
             }
         }
 
-        private async Task LoadCardAsync(Guid id)
+        private async Task LoadCardAsync(Guid deckId, Guid cardId)
         {
-            if (DeckId == Guid.Empty || IsBusy) return; 
+            if (IsBusy) return;
             IsBusy = true;
             try
             {
-                // Need to load the deck to find the card
-                var deck = await _dataService.GetDeckAsync(DeckId);
-                _originalCard = deck?.Cards.FirstOrDefault(c => c.Id == id);
+                var deck = await _dataService.GetDeckAsync(deckId);
+                _originalCard = deck?.Cards.FirstOrDefault(c => c.Id == cardId);
 
                 if (_originalCard != null)
                 {
@@ -100,7 +119,7 @@ namespace FlashcardGamification.ViewModel
         [RelayCommand]
         async Task SaveCardAsync()
         {
-            if (DeckId == Guid.Empty)
+            if (_deckId == Guid.Empty)
             {
                 await Shell.Current.DisplayAlert("Error", "Cannot save card without a Deck ID.", "OK");
                 return;
@@ -118,22 +137,20 @@ namespace FlashcardGamification.ViewModel
             {
                 if (IsEditing && _originalCard != null)
                 {
-                    // Update existing card 
                     _originalCard.FrontContent = CardFront;
                     _originalCard.BackContent = CardBack;
-                    await _dataService.UpdateCardInDeckAsync(DeckId, _originalCard);
+                    await _dataService.UpdateCardInDeckAsync(_deckId, _originalCard);
                 }
                 else
                 {
-                    // Create new card
                     var newCard = new Card
                     {
                         FrontContent = CardFront,
                         BackContent = CardBack
                     };
-                    await _dataService.AddCardToDeckAsync(DeckId, newCard);
+                    await _dataService.AddCardToDeckAsync(_deckId, newCard);
                 }
-                await Shell.Current.GoToAsync(".."); // Navigate back
+                await Shell.Current.GoToAsync("..");
             }
             catch (Exception ex)
             {

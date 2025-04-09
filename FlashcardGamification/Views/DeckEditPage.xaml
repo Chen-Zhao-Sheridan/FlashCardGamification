@@ -5,12 +5,19 @@
              xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
              x:DataType="viewmodels:DeckEditViewModel"
              Title="{Binding Title}">
-    <VerticalStackLayout Padding="10">
-        <Label
-            Text="Deck Edit Page Placeholder"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+	<VerticalStackLayout Padding="20" Spacing="15">
+
+		<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+		<Label Text="Deck Name:" FontAttributes="Bold"/>
+		<Entry Text="{Binding DeckName}" Placeholder="Enter deck name"/>
+
+		<HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+			<Button Text="Save" Command="{Binding SaveDeckCommand}" IsEnabled="{Binding IsNotBusy}"/>
+			<Button Text="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding IsNotBusy}"/>
+		</HorizontalStackLayout>
+
+	</VerticalStackLayout>
 </ContentPage>
 
     

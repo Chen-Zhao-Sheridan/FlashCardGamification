@@ -5,12 +5,25 @@
              xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
              x:DataType="viewmodels:CardEditViewModel"
              Title="{Binding Title}">
-    <VerticalStackLayout Padding="10">
-        <Label
-            Text="Card Edit Page Placeholder"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+	<ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="10">
+
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+			<Label Text="Card Front (Question/Prompt):" FontAttributes="Bold"/>
+			<Editor Text="{Binding CardFront}" Placeholder="Enter the front text" AutoSize="TextChanges" HeightRequest="100"/>
+
+			<Label Text="Card Back (Answer/Info):" FontAttributes="Bold"/>
+			<Editor Text="{Binding CardBack}" Placeholder="Enter the back text" AutoSize="TextChanges" HeightRequest="100"/>
+
+			<HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="20,0,0,0">
+				<Button Text="Save Card" Command="{Binding SaveCardCommand}" IsEnabled="{Binding IsNotBusy}"/>
+				<Button Text="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding IsNotBusy}"/>
+			</HorizontalStackLayout>
+
+		</VerticalStackLayout>
+	</ScrollView>
 </ContentPage>
 
     

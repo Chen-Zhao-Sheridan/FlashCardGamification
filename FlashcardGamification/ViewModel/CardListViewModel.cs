@@ -8,13 +8,14 @@ using FlashcardGamification.Views;
 
 namespace FlashcardGamification.ViewModel
 {
-    [QueryProperty(nameof(DeckId), "DeckId")]
+    [QueryProperty(nameof(DeckIdString), "DeckId")]
     public partial class CardListViewModel : BaseViewModel
     {
         private readonly IDataService _dataService;
+        private Guid _deckId; 
 
         [ObservableProperty]
-        Guid deckId; // Set via navigation
+        string deckIdString;
 
         [ObservableProperty]
         Deck currentDeck; 
@@ -29,27 +30,33 @@ namespace FlashcardGamification.ViewModel
         {
             _dataService = dataService;
             Cards = new ObservableCollection<Card>();
-            Title = "Cards"; // Default, will update
+            Title = "Cards"; 
         }
 
         // Triggered when DeckId is set via navigation
-        async partial void OnDeckIdChanged(Guid value)
+        async partial void OnDeckIdStringChanged(string value)
         {
-            if (value != Guid.Empty)
+            if (Guid.TryParse(value, out _deckId) && _deckId != Guid.Empty)
             {
                 await LoadCardsAsync();
+            }
+            else
+            {
+                Console.WriteLine($"Invalid DeckId received: {value}");
+                await Shell.Current.DisplayAlert("Error", "Invalid Deck ID.", "OK");
+                await Shell.Current.GoToAsync(".."); // Go back if ID is invalid
             }
         }
 
         [RelayCommand]
         async Task LoadCardsAsync()
         {
-            if (DeckId == Guid.Empty || IsLoading) return;
+            if (_deckId == Guid.Empty || IsLoading) return;
 
             IsLoading = true;
             try
             {
-                CurrentDeck = await _dataService.GetDeckAsync(DeckId);
+                CurrentDeck = await _dataService.GetDeckAsync(_deckId);
                 if (CurrentDeck != null)
                 {
                     Title = $"Deck: {CurrentDeck.Name}"; // Update title
@@ -126,7 +133,7 @@ namespace FlashcardGamification.ViewModel
         {
             if (CurrentDeck != null && !IsLoading)
             {
-                Task.Run(async () => await LoadCardsAsync()); // Refresh the list
+                LoadCardsCommand.Execute(null); // Refresh the list
             }
         }
     }
