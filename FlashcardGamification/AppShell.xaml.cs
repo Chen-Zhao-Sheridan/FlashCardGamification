@@ -7,8 +7,7 @@ namespace FlashcardGamification
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(DeckEditPage), typeof(DeckEditPage));
-            Routing.RegisterRoute(nameof(CardListPage), typeof(CardListPage));
+            Routing.RegisterRoute(nameof(DeckDetailPage), typeof(DeckDetailPage));
             Routing.RegisterRoute(nameof(CardEditPage), typeof(CardEditPage));
         }
     }

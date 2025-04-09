@@ -2,11 +2,10 @@
 
 namespace FlashcardGamification.Views
 {
-    public partial class CardListPage : ContentPage
+    public partial class DeckDetailPage : ContentPage
     {
-        private readonly CardListViewModel _viewModel;
-
-        public CardListPage(CardListViewModel viewModel)
+        private readonly DeckDetailViewModel _viewModel;
+        public DeckDetailPage(DeckDetailViewModel viewModel) 
         {
             InitializeComponent();
             _viewModel = viewModel;

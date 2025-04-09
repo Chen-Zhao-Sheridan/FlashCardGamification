@@ -14,7 +14,7 @@
 			<CollectionView.ItemTemplate>
 				<DataTemplate x:DataType="models:Deck">
 					<Frame Padding="10" Margin="5" BorderColor="LightGray" CornerRadius="5">
-						<Grid ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="5">
+						<Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="5">
 							<!-- Deck Name and Card Count -->
 							<VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
 								<Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium"/>
@@ -22,9 +22,8 @@
 							</VerticalStackLayout>
 
 							<!-- Buttons -->
-							<Button Grid.Column="1" Text="Review" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToDeckDetailsCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
-							<Button Grid.Column="2" Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToEditDeckCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
-							<Button Grid.Column="3" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=DeleteDeckCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" TextColor="White" FontSize="Small"/>
+							<Button Grid.Column="1" Text="Select" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToDeckDetailsCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
+							<Button Grid.Column="2" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=DeleteDeckCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" TextColor="White" FontSize="Small"/>
 						</Grid>
 					</Frame>
 				</DataTemplate>

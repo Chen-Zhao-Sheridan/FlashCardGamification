@@ -66,13 +66,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\DeckDetailPage.xaml.cs">
+	    <DependentUpon>DeckDetailPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DeckListPage.xaml.cs">
+	    <DependentUpon>DeckListPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\CardEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\CardListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DeckEditPage.xaml">
+	  <MauiXaml Update="Views\DeckDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\DeckListPage.xaml">

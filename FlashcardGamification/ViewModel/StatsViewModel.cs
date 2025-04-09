@@ -15,6 +15,8 @@ namespace FlashcardGamification.ViewModel
         [ObservableProperty]
         bool isLoading;
 
+        public bool IsNotLoading => !IsBusy;
+
         public StatsViewModel(IDataService dataService)
         {
             _dataService = dataService;

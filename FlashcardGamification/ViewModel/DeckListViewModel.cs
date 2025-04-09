@@ -15,7 +15,9 @@ namespace FlashcardGamification.ViewModel
         ObservableCollection<Deck> decks;
 
         [ObservableProperty]
-        bool isLoading; 
+        bool isLoading;
+
+        public bool IsNotLoading => !IsBusy;
 
         public DeckListViewModel(IDataService dataService)
         {
@@ -55,7 +57,7 @@ namespace FlashcardGamification.ViewModel
         async Task GoToCreateDeckAsync()
         {
             // Navigate to the DeckEditPage for creating a new deck
-            await Shell.Current.GoToAsync(nameof(DeckEditPage));
+            await Shell.Current.GoToAsync(nameof(DeckDetailPage));
         }
 
         [RelayCommand]
@@ -64,16 +66,7 @@ namespace FlashcardGamification.ViewModel
             if (deck == null) return;
 
             // Navigate to CardListPage, passing the DeckId
-            await Shell.Current.GoToAsync($"{nameof(CardListPage)}?DeckId={deck.Id}");
-        }
-
-        [RelayCommand]
-        async Task GoToEditDeckAsync(Deck deck)
-        {
-            if (deck == null) return;
-
-            // Navigate to DeckEditPage, passing the DeckId for editing
-            await Shell.Current.GoToAsync($"{nameof(DeckEditPage)}?DeckId={deck.Id}");
+            await Shell.Current.GoToAsync($"{nameof(DeckDetailPage)}?DeckId={deck.Id}");
         }
 
 
