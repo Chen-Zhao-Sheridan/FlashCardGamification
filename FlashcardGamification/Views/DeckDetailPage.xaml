@@ -6,44 +6,69 @@
              xmlns:models="clr-namespace:FlashcardGamification.CoreLogic.Models"
              x:DataType="viewmodels:DeckDetailViewModel"
              Title="{Binding Title}">
-	<Grid RowDefinitions="Auto, Auto, *, Auto, Auto" Padding="10" RowSpacing="10">
+
+	<Grid RowDefinitions="Auto, Auto, *, Auto" Padding="{StaticResource PagePadding}" RowSpacing="{StaticResource LargeSpacing}"
+          MaximumWidthRequest="800"
+          HorizontalOptions="Center">
 
 		<ActivityIndicator Grid.Row="0" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center"/>
 
 		<!-- Deck Name Editing -->
-		<VerticalStackLayout Grid.Row="1" Spacing="5">
-			<Label Text="Deck Name:" FontAttributes="Bold"/>
-			<Entry Text="{Binding DeckName}" Placeholder="Enter deck name"/>
-			<Button Text="Update Deck Name" Command="{Binding SaveDeckCommand}" IsEnabled="{Binding IsNotLoading}" HorizontalOptions="Start"/>
-		</VerticalStackLayout>
+		<Border Grid.Row="1" Style="{StaticResource CardView}" Padding="{StaticResource MediumSpacing}">
+			<VerticalStackLayout Spacing="{StaticResource MediumSpacing}">
+				<Label Text="Deck Name" FontAttributes="Bold"/>
+				<Entry Text="{Binding DeckName}" Placeholder="Enter deck name"/>
+				<Button Text="Save Name" Command="{Binding SaveDeckCommand}" IsEnabled="{Binding IsNotLoading}" HorizontalOptions="Start" Style="{StaticResource SecondaryButton}"/>
+			</VerticalStackLayout>
+		</Border>
+
 
 		<!-- Card List -->
-		<CollectionView Grid.Row="2" ItemsSource="{Binding Cards}" SelectionMode="None" EmptyView="No cards in this deck yet.">
-			<CollectionView.Header>
-				<Label Text="Cards in Deck:" FontAttributes="Bold" FontSize="Medium" Margin="0,10,0,5"/>
-			</CollectionView.Header>
-			<CollectionView.ItemTemplate>
-				<DataTemplate x:DataType="models:Card">
-					<Frame Padding="10" Margin="5,0,5,5" BorderColor="LightGray" CornerRadius="5">
-						<Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="5">
-							<!-- Show Front text -->
-							<Label Grid.Column="0" Text="{Binding FrontContent}" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+		<Grid Grid.Row="2" RowDefinitions="Auto, *">
+			<Label Grid.Row="0" Text="Cards in Deck" FontAttributes="Bold" FontSize="Medium" Margin="0,0,0,10"/>
+			<CollectionView Grid.Row="1" ItemsSource="{Binding Cards}" SelectionMode="None" VerticalOptions="FillAndExpand">
+				<CollectionView.EmptyView>
+					<StackLayout Padding="30" HorizontalOptions="Fill" VerticalOptions="Center">
+						<Label Text="No cards yet." HorizontalTextAlignment="Center"/>
+						<Label Text="Tap 'Add New Card' below." HorizontalTextAlignment="Center" TextColor="{StaticResource MidGrayColor}"/>
+					</StackLayout>
+				</CollectionView.EmptyView>
+				<CollectionView.ItemTemplate>
+					<DataTemplate x:DataType="models:Card">
+						<Border Style="{StaticResource CardView}" Padding="{StaticResource MediumSpacing}">
+							<Grid ColumnDefinitions="*, Auto" ColumnSpacing="{StaticResource MediumSpacing}">
+								<!-- Card Front Text -->
+								<Label Grid.Column="0"
+									   Text="{Binding FrontContent}"
+									   VerticalOptions="Center"
+									   LineBreakMode="TailTruncation"
+									   MaxLines="2"/>
+								<!-- Limit lines for display -->
 
-							<!-- Buttons -->
-							<Button Grid.Column="1" Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckDetailViewModel}}, Path=GoToEditCardCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
-							<Button Grid.Column="2" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckDetailViewModel}}, Path=DeleteCardCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" TextColor="White" FontSize="Small"/>
-						</Grid>
-					</Frame>
-				</DataTemplate>
-			</CollectionView.ItemTemplate>
-		</CollectionView>
+								<!-- Action Buttons -->
+								<HorizontalStackLayout Grid.Column="1" Spacing="{StaticResource SmallSpacing}" VerticalOptions="Center">
+									<Button Text="✎" ToolTipProperties.Text="Edit Card"
+                                            Style="{StaticResource IconButton}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckDetailViewModel}}, Path=GoToEditCardCommand}"
+                                            CommandParameter="{Binding .}" />
+									<Button Text="🗑" ToolTipProperties.Text="Delete Card"
+                                            Style="{StaticResource IconButton}"
+                                            BackgroundColor="{StaticResource DeleteColor}" TextColor="White"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckDetailViewModel}}, Path=DeleteCardCommand}"
+                                            CommandParameter="{Binding .}" />
+								</HorizontalStackLayout>
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+		</Grid>
+
 
 		<!-- Action Buttons -->
-		<Button Grid.Row="3" Text="Add New Card" Command="{Binding GoToAddCardCommand}" IsEnabled="{Binding IsNotLoading}"/>
-		<Button Grid.Row="4" Text="Start Review Session" Command="{Binding StartReviewCommand}" IsEnabled="{Binding IsNotLoading}" FontAttributes="Bold"/>
-
-		<!-- Optional: Add Cancel/Back button if needed, or rely on Shell's back navigation -->
-		<!-- <Button Grid.Row="5" Text="Back to List" Command="{Binding CancelCommand}" IsEnabled="{Binding IsNotLoading}"/> -->
+		<VerticalStackLayout Grid.Row="3" Spacing="{StaticResource MediumSpacing}">
+			<Button Text="Add New Card" Command="{Binding GoToAddCardCommand}" IsEnabled="{Binding IsNotLoading}" Style="{StaticResource SecondaryButton}"/>
+		</VerticalStackLayout>
 
 	</Grid>
 </ContentPage>

@@ -5,40 +5,59 @@
              xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
              x:DataType="viewmodels:StatsViewModel"
              Title="{Binding Title}">
-	<VerticalStackLayout Padding="20" Spacing="10">
+	<ScrollView Padding="{StaticResource PagePadding}">
+		<!-- Apply MaxWidthRequest and Center horizontally -->
+		<VerticalStackLayout Spacing="{StaticResource LargeSpacing}"
+                             MaximumWidthRequest="800"
+                             HorizontalOptions="Center">
 
-		<ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+			<ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" Margin="0,0,0,10"/>
 
-		<Label Text="Overall Stats" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center"/>
+			<Label Text="Overall Progress" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center"/>
 
-		<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="5" ColumnSpacing="10">
+			<!-- Stat Card -->
+			<Border Style="{StaticResource CardView}">
+				<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="{StaticResource SmallSpacing}" ColumnSpacing="{StaticResource MediumSpacing}">
+					<Label Grid.Row="0" Grid.Column="1" Text="Level" FontSize="Small" TextColor="{StaticResource MidGrayColor}"/>
+					<Label Grid.Row="1" Grid.Column="1" Text="{Binding CurrentUser.Level}" FontSize="Large" FontAttributes="Bold"/>
+					<Label Grid.Row="2" Grid.Column="0" Text="XP:" FontAttributes="Bold" VerticalOptions="Center"/>
+					<HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="{StaticResource SmallSpacing}" VerticalOptions="Center">
+						<Label Text="{Binding CurrentUser.XP}" FontSize="Medium" VerticalOptions="Center"/>
+					</HorizontalStackLayout>
+				</Grid>
+			</Border>
 
-			<Label Grid.Row="0" Grid.Column="0" Text="User ID:" FontAttributes="Bold"/>
-			<Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentUser.UserId}" LineBreakMode="TailTruncation"/>
+			<!-- Streak Card -->
+			<Border Style="{StaticResource CardView}">
+				<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="{StaticResource SmallSpacing}" ColumnSpacing="{StaticResource MediumSpacing}">
+					<Label Grid.Row="0" Grid.Column="1" Text="Daily Streak" FontSize="Small" TextColor="{StaticResource MidGrayColor}"/>
+					<Label Grid.Row="1" Grid.Column="1" FontSize="Medium" FontAttributes="Bold">
+						<Label.FormattedText>
+							<FormattedString>
+								<Span Text="{Binding CurrentUser.CurrentDailyStreak, StringFormat='Current: {0}'}"/>
+								<Span Text=" | "/>
+								<Span Text="{Binding CurrentUser.LongestDailyStreak, StringFormat='Longest: {0}'}"/>
+							</FormattedString>
+						</Label.FormattedText>
+					</Label>
+				</Grid>
+			</Border>
 
-			<Label Grid.Row="1" Grid.Column="0" Text="Level:" FontAttributes="Bold"/>
-			<Label Grid.Row="1" Grid.Column="1" Text="{Binding CurrentUser.Level}" />
+			<!-- Totals Card -->
+			<Border Style="{StaticResource CardView}">
+				<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="{StaticResource SmallSpacing}" ColumnSpacing="{StaticResource MediumSpacing}">
+					<Label Grid.Row="0" Grid.Column="1" Text="Lifetime Totals" FontSize="Small" TextColor="{StaticResource MidGrayColor}"/>
+					<VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="{StaticResource SmallSpacing}">
+						<Label Text="{Binding CurrentUser.TotalCorrectAnswers, StringFormat='Correct Answers: {0}'}" FontSize="Small"/>
+						<Label Text="{Binding CurrentUser.TotalSessionsCompleted, StringFormat='Sessions Completed: {0}'}" FontSize="Small"/>
+					</VerticalStackLayout>
+				</Grid>
+			</Border>
 
-			<Label Grid.Row="2" Grid.Column="0" Text="XP:" FontAttributes="Bold"/>
-			<Label Grid.Row="2" Grid.Column="1" Text="{Binding CurrentUser.XP}" />
+			<Button Text="Refresh Stats" Command="{Binding LoadStatsCommand}" IsEnabled="{Binding IsNotLoading}" HorizontalOptions="FillAndExpand" Style="{StaticResource SecondaryButton}"/>
 
-			<Label Grid.Row="3" Grid.Column="0" Text="Current Streak:" FontAttributes="Bold"/>
-			<Label Grid.Row="3" Grid.Column="1" Text="{Binding CurrentUser.CurrentDailyStreak}" />
-
-			<Label Grid.Row="4" Grid.Column="0" Text="Longest Streak:" FontAttributes="Bold"/>
-			<Label Grid.Row="4" Grid.Column="1" Text="{Binding CurrentUser.LongestDailyStreak}" />
-
-			<Label Grid.Row="5" Grid.Column="0" Text="Total Correct:" FontAttributes="Bold"/>
-			<Label Grid.Row="5" Grid.Column="1" Text="{Binding CurrentUser.TotalCorrectAnswers}" />
-
-			<Label Grid.Row="6" Grid.Column="0" Text="Sessions Done:" FontAttributes="Bold"/>
-			<Label Grid.Row="6" Grid.Column="1" Text="{Binding CurrentUser.TotalSessionsCompleted}" />
-
-		</Grid>
-
-		<Button Text="Refresh Stats" Command="{Binding LoadStatsCommand}" IsEnabled="{Binding IsNotBusy}"/>
-
-	</VerticalStackLayout>
+		</VerticalStackLayout>
+	</ScrollView>
 </ContentPage>
 
     

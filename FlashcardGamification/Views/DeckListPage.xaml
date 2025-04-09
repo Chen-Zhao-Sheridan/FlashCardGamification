@@ -6,31 +6,45 @@
              xmlns:models="clr-namespace:FlashcardGamification.CoreLogic.Models"
              x:DataType="viewmodels:DeckListViewModel"
              Title="{Binding Title}">
-	<Grid RowDefinitions="Auto, *, Auto">
+	<Grid RowDefinitions="Auto, *, Auto" Padding="{StaticResource PagePadding}"
+			  MaximumWidthRequest="800"
+			  HorizontalOptions="Center">
 
-		<ActivityIndicator Grid.Row="0" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" Margin="10"/>
+		<ActivityIndicator Grid.Row="0" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" Margin="0,0,0,10"/>
 
-		<CollectionView Grid.Row="1" ItemsSource="{Binding Decks}" SelectionMode="None" EmptyView="No decks found. Create one!">
+		<CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Decks}"
+                        SelectionMode="None"
+                        VerticalOptions="FillAndExpand">
+			<CollectionView.EmptyView>
+				<StackLayout Padding="50" HorizontalOptions="Center" VerticalOptions="Center">
+					<Label Text="No decks found." HorizontalTextAlignment="Center"/>
+					<Label Text="Tap 'Create New Deck' to get started!" HorizontalTextAlignment="Center" TextColor="{StaticResource MidGrayColor}"/>
+				</StackLayout>
+			</CollectionView.EmptyView>
 			<CollectionView.ItemTemplate>
 				<DataTemplate x:DataType="models:Deck">
-					<Frame Padding="10" Margin="5" BorderColor="LightGray" CornerRadius="5">
-						<Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="5">
-							<!-- Deck Name and Card Count -->
-							<VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+					<Border Style="{StaticResource CardView}">
+						<Grid ColumnDefinitions="*, Auto" ColumnSpacing="{StaticResource MediumSpacing}">
+							<VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="{StaticResource SmallSpacing}">
+								<VerticalStackLayout.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToDeckDetailsCommand}" CommandParameter="{Binding .}"/>
+								</VerticalStackLayout.GestureRecognizers>
 								<Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium"/>
-								<Label Text="{Binding Cards.Count, StringFormat='{0} Cards'}" FontSize="Small" TextColor="Gray"/>
+								<Label Text="{Binding Cards.Count, StringFormat='{0} Cards'}" FontSize="Small" TextColor="{StaticResource MidGrayColor}"/>
 							</VerticalStackLayout>
-
-							<!-- Buttons -->
-							<Button Grid.Column="1" Text="Select" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToDeckDetailsCommand}" CommandParameter="{Binding .}" FontSize="Small"/>
-							<Button Grid.Column="2" Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=DeleteDeckCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" TextColor="White" FontSize="Small"/>
+							<HorizontalStackLayout Grid.Column="1" Spacing="{StaticResource SmallSpacing}" VerticalOptions="Center">
+								<Button Text="▶" ToolTipProperties.Text="Review" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=StartReviewCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" BackgroundColor="{StaticResource SuccessColor}" TextColor="White"/>
+								<Button Text="✎" ToolTipProperties.Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToDeckDetailsCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}"/>
+								<Button Text="🗑" ToolTipProperties.Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=DeleteDeckCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" BackgroundColor="{StaticResource DeleteColor}" TextColor="White"/>
+							</HorizontalStackLayout>
 						</Grid>
-					</Frame>
+					</Border>
 				</DataTemplate>
 			</CollectionView.ItemTemplate>
 		</CollectionView>
 
-		<Button Grid.Row="2" Text="Create New Deck" Command="{Binding GoToCreateDeckCommand}" Margin="20"/>
+		<Button Grid.Row="2" Text="Create New Deck" Command="{Binding GoToCreateDeckCommand}" HorizontalOptions="FillAndExpand" Margin="0,10,0,0"/>
 
 	</Grid>
 </ContentPage>

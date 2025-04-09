@@ -57,7 +57,7 @@ namespace FlashcardGamification.ViewModel
         async Task GoToCreateDeckAsync()
         {
             // Navigate to the DeckEditPage for creating a new deck
-            await Shell.Current.GoToAsync(nameof(DeckDetailPage));
+            await Shell.Current.GoToAsync($"{nameof(DeckDetailPage)}?DeckId=");
         }
 
         [RelayCommand]
@@ -67,6 +67,12 @@ namespace FlashcardGamification.ViewModel
 
             // Navigate to CardListPage, passing the DeckId
             await Shell.Current.GoToAsync($"{nameof(DeckDetailPage)}?DeckId={deck.Id}");
+        }
+
+        [RelayCommand]
+        async Task StartReviewAsync(Deck deck)
+        {
+            //await Shell.Current.GoToAsync($"{nameof(DeckReviewPage)}?DeckId={deck.Id}");
         }
 
 

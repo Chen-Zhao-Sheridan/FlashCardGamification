@@ -43,7 +43,7 @@ namespace FlashcardGamification.ViewModel
 
         async partial void OnDeckIdStringChanged(string value)
         {
-            IsEditing = Guid.TryParse(value, out _deckId) && _deckId != Guid.Empty;
+            IsEditing = Guid.TryParse(value, out _deckId) && value != null && value != "";
 
             if (IsEditing) // Existing deck
             {
@@ -182,23 +182,10 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
-        // Review Command
-
-        [RelayCommand]
-        async Task StartReviewAsync()
-        {
-            if (_currentDeck == null || !Cards.Any())
-            {
-                await Shell.Current.DisplayAlert("Cannot Start", "Add some cards to the deck before reviewing.", "OK");
-                return;
-            }
-        }
-
-
         public async void OnAppearing()
         {
 
-            if (_deckId != Guid.Empty && !IsLoading)
+            if (_deckId != Guid.Empty && !IsLoading && DeckIdString != "")
             {
                 Console.WriteLine("DeckDetailViewModel OnAppearing - Refreshing Deck");
                 await LoadDeckAsync(_deckId);

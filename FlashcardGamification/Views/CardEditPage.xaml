@@ -6,20 +6,36 @@
              x:DataType="viewmodels:CardEditViewModel"
              Title="{Binding Title}">
 
-	<ScrollView>
-		<VerticalStackLayout Padding="20" Spacing="10">
+	<ScrollView Padding="{StaticResource PagePadding}">
+		<!-- Apply MaxWidthRequest and Center horizontally -->
+		<VerticalStackLayout Spacing="{StaticResource LargeSpacing}"
+                             MaximumWidthRequest="800"
+                             HorizontalOptions="Center">
 
-			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+			<ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HorizontalOptions="Center"/>
 
-			<Label Text="Card Front (Question/Prompt):" FontAttributes="Bold"/>
-			<Editor Text="{Binding CardFront}" Placeholder="Enter the front text" AutoSize="TextChanges" HeightRequest="100"/>
+			<VerticalStackLayout Spacing="{StaticResource SmallSpacing}">
+				<!-- Label and Editor for Front -->
+				<Label Text="Card Front (Question/Prompt)" FontAttributes="Bold"/>
+				<Border Stroke="{StaticResource CardBorderColor}" StrokeThickness="1" Padding="2" StrokeShape="RoundRectangle 8,8,8,8">
+					<Editor Text="{Binding CardFront}" Placeholder="Enter the front text" AutoSize="TextChanges" HeightRequest="120"/>
+				</Border>
+			</VerticalStackLayout>
 
-			<Label Text="Card Back (Answer/Info):" FontAttributes="Bold"/>
-			<Editor Text="{Binding CardBack}" Placeholder="Enter the back text" AutoSize="TextChanges" HeightRequest="100"/>
 
-			<HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="20,0,0,0">
+			<VerticalStackLayout Spacing="{StaticResource SmallSpacing}">
+				<!-- Label and Editor for Back -->
+				<Label Text="Card Back (Answer/Info)" FontAttributes="Bold"/>
+				<Border Stroke="{StaticResource CardBorderColor}" StrokeThickness="1" Padding="2" StrokeShape="RoundRectangle 8,8,8,8">
+					<Editor Text="{Binding CardBack}" Placeholder="Enter the back text" AutoSize="TextChanges" HeightRequest="120"/>
+				</Border>
+			</VerticalStackLayout>
+
+
+			<HorizontalStackLayout Spacing="{StaticResource MediumSpacing}" HorizontalOptions="Center" Margin="0,10,0,0">
+				<!-- Buttons -->
+				<Button Text="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding IsNotBusy}" Style="{StaticResource SecondaryButton}"/>
 				<Button Text="Save Card" Command="{Binding SaveCardCommand}" IsEnabled="{Binding IsNotBusy}"/>
-				<Button Text="Cancel" Command="{Binding CancelCommand}" IsEnabled="{Binding IsNotBusy}"/>
 			</HorizontalStackLayout>
 
 		</VerticalStackLayout>
