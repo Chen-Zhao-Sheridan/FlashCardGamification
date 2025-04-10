@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashcardGamification.Views.DeckReviewPage"
+             xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
+             xmlns:converters="clr-namespace:FlashcardGamification.Converters"
+             x:DataType="viewmodels:DeckReviewViewModel"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:FlipTextConverter x:Key="FlipTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="{StaticResource PagePadding}" RowSpacing="{StaticResource MediumSpacing}"
+          MaximumWidthRequest="800"
+          HorizontalOptions="Center">
+
+        <ActivityIndicator Grid.Row="0" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" />
+
+        <!-- Progress -->
+        <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" IsVisible="{Binding IsNotLoading}">
+            <Label Text="{Binding ProgressText}" HorizontalOptions="Center" FontSize="Small" TextColor="{StaticResource MidGrayColor}"/>
+            <!-- Optional: Add ProgressBar -->
+        </VerticalStackLayout>
+
+
+        <!-- Card Display Area -->
+        <Grid Grid.Row="2"
+                Style="{StaticResource CardView}"
+                Padding="{StaticResource LargeSpacing}">
+            <ScrollView VerticalOptions="Center" Grid.Row="0">
+                <VerticalStackLayout Spacing="{StaticResource LargeSpacing}" IsVisible="{Binding IsSessionComplete, Converter={StaticResource InverseBoolConverter}}">
+                    <!-- Front -->
+                    <VerticalStackLayout>
+                        <Label Text="FRONT" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource MidGrayColor}"/>
+                        <Label Text="{Binding DisplayQuestion}" FontSize="Title" HeightRequest="100"/>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource CardBorderColor}" Margin="0,10"/>
+
+                    <!-- Back (conditionally visible) -->
+                    <VerticalStackLayout IsVisible="{Binding IsAnswerVisible}">
+                        <Label Text="BACK" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource MidGrayColor}"/>
+                        <Label Text="{Binding DisplayAnswer}" FontSize="Title" HeightRequest="100"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Session Complete Message -->
+            <Label Text="Session Complete!"  Grid.Row="1"
+                    FontSize="Large" FontAttributes="Bold"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    IsVisible="{Binding IsSessionComplete}" />
+        </Grid>
+
+
+        <!-- Action Buttons -->
+        <VerticalStackLayout Grid.Row="3" Spacing="{StaticResource MediumSpacing}" Margin="0,10,0,0">
+            <!-- Flip Button -->
+            <Button Text="{Binding IsAnswerVisible, Converter={StaticResource FlipTextConverter}}"
+                    Command="{Binding FlipCardCommand}"
+                    IsVisible="{Binding IsSessionComplete, Converter={StaticResource InverseBoolConverter}}"
+                    Style="{StaticResource SecondaryButton}" />
+
+            <!-- Correct/Incorrect Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="{StaticResource MediumSpacing}" IsVisible="{Binding IsAnswerVisible}">
+                <Button Grid.Column="0" Text="Incorrect"
+                         Command="{Binding SubmitAnswerCommand}"
+                         CommandParameter="False"
+                         Style="{StaticResource DeleteButton}"/>
+                <Button Grid.Column="1" Text="Correct"
+                         Command="{Binding SubmitAnswerCommand}"
+                         CommandParameter="True"
+                         Style="{StaticResource SuccessButton}"/>
+            </Grid>
+
+            <!-- Abort Button -->
+            <Button Text="Abort Session"
+                    Command="{Binding AbortSessionCommand}"
+                    IsVisible="{Binding IsSessionComplete, Converter={StaticResource InverseBoolConverter}}"
+                    Style="{StaticResource SecondaryButton}" BackgroundColor="{StaticResource MidGrayColor}" TextColor="{StaticResource DarkGrayColor}"
+                    HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

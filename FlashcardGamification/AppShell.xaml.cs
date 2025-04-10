@@ -9,6 +9,9 @@ namespace FlashcardGamification
             InitializeComponent();
             Routing.RegisterRoute(nameof(DeckDetailPage), typeof(DeckDetailPage));
             Routing.RegisterRoute(nameof(CardEditPage), typeof(CardEditPage));
+            Routing.RegisterRoute(nameof(DeckReviewPage), typeof(DeckReviewPage));
+            Routing.RegisterRoute(nameof(DeckListPage), typeof(DeckListPage));
+            Routing.RegisterRoute(nameof(ResultsPage), typeof(ResultsPage));
         }
     }
 }

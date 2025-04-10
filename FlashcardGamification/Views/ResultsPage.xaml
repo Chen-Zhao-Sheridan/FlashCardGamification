@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashcardGamification.Views.ResultsPage"
+             xmlns:viewmodels="clr-namespace:FlashcardGamification.ViewModel"
+             x:DataType="viewmodels:ResultsViewModel"
+             Title="{Binding Title}">
+
+    <VerticalStackLayout Padding="{StaticResource PagePadding}" Spacing="{StaticResource ExtraLargeSpacing}" VerticalOptions="Center"
+                         MaximumWidthRequest="800"
+                         HorizontalOptions="Center">
+
+        <Label Text="Session Results" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+        <Border Style="{StaticResource CardView}" Padding="{StaticResource ExtraLargeSpacing}">
+            <Label Text="{Binding ResultSummary}"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
+                    FontSize="Large"
+                    LineHeight="1.4"/>
+        </Border>
+
+
+        <VerticalStackLayout Spacing="{StaticResource MediumSpacing}">
+            <!-- Button is enabled/disabled by CanExecute -->
+            <Button Text="Review Same Deck Again" Command="{Binding ReviewAgainCommand}" Style="{StaticResource SecondaryButton}"/>
+            <Button Text="Back to Deck List" Command="{Binding GoToDeckListCommand}"/>
+        </VerticalStackLayout>
+
+    </VerticalStackLayout>
+</ContentPage>

@@ -72,6 +72,9 @@
 	  <Compile Update="Views\DeckListPage.xaml.cs">
 	    <DependentUpon>DeckListPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\DeckReviewPage.xaml.cs">
+	    <DependentUpon>DeckReviewPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -85,6 +88,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\DeckListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DeckReviewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ResultsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\StatsPage.xaml">

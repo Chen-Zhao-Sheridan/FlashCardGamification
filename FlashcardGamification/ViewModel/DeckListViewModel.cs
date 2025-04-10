@@ -72,7 +72,7 @@ namespace FlashcardGamification.ViewModel
         [RelayCommand]
         async Task StartReviewAsync(Deck deck)
         {
-            //await Shell.Current.GoToAsync($"{nameof(DeckReviewPage)}?DeckId={deck.Id}");
+            await Shell.Current.GoToAsync($"{nameof(DeckReviewPage)}?DeckId={deck.Id}");
         }
 
 

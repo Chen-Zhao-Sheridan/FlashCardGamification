@@ -25,14 +25,18 @@ namespace FlashcardGamification
             // Register ViewModels 
             builder.Services.AddTransient<DeckListViewModel>();
             builder.Services.AddTransient<DeckDetailViewModel>();
+            builder.Services.AddTransient<DeckReviewViewModel>();
             builder.Services.AddTransient<CardEditViewModel>();
             builder.Services.AddTransient<StatsViewModel>();
+            builder.Services.AddTransient<ResultsViewModel>();
 
             // Register Views
             builder.Services.AddTransient<DeckListPage>();
             builder.Services.AddTransient<DeckDetailPage>();
+            builder.Services.AddTransient<DeckReviewPage>();
             builder.Services.AddTransient<CardEditPage>();
             builder.Services.AddTransient<StatsPage>();
+            builder.Services.AddTransient<ResultsPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

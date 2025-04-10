@@ -31,16 +31,11 @@
 			<Border Style="{StaticResource CardView}">
 				<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="{StaticResource SmallSpacing}" ColumnSpacing="{StaticResource MediumSpacing}">
 					<Label Grid.Row="0" Grid.Column="1" Text="Daily Streak" FontSize="Small" TextColor="{StaticResource MidGrayColor}"/>
-					<Label Grid.Row="1" Grid.Column="1" FontSize="Medium" FontAttributes="Bold">
-						<Label.FormattedText>
-							<FormattedString>
-								<Span Text="{Binding CurrentUser.CurrentDailyStreak, StringFormat='Current: {0}'}"/>
-								<Span Text=" | "/>
-								<Span Text="{Binding CurrentUser.LongestDailyStreak, StringFormat='Longest: {0}'}"/>
-							</FormattedString>
-						</Label.FormattedText>
-					</Label>
-				</Grid>
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="2">
+                        <Label Text="{Binding CurrentUser.CurrentDailyStreak, StringFormat='Current: {0}'}" FontSize="Medium" FontAttributes="Bold"/>
+                        <Label Text="{Binding CurrentUser.LongestDailyStreak, StringFormat='Longest: {0}'}" FontSize="Medium" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Grid>
 			</Border>
 
 			<!-- Totals Card -->

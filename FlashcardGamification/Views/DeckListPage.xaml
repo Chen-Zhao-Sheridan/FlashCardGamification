@@ -36,8 +36,8 @@
 							<HorizontalStackLayout Grid.Column="1" Spacing="{StaticResource SmallSpacing}" VerticalOptions="Center">
 								<Button Text="▶" ToolTipProperties.Text="Review" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=StartReviewCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" BackgroundColor="{StaticResource SuccessColor}" TextColor="White"/>
 								<Button Text="✎" ToolTipProperties.Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=GoToDeckDetailsCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}"/>
-								<Button Text="🗑" ToolTipProperties.Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=DeleteDeckCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" BackgroundColor="{StaticResource DeleteColor}" TextColor="White"/>
-							</HorizontalStackLayout>
+                                <Button Text="🗑" ToolTipProperties.Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DeckListViewModel}}, Path=DeleteDeckCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" BackgroundColor="{StaticResource DeleteColor}" TextColor="White"/>
+                            </HorizontalStackLayout>
 						</Grid>
 					</Border>
 				</DataTemplate>
