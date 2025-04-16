@@ -219,7 +219,7 @@ namespace FlashcardGamification.ViewModel
         {
             bool confirm = await Shell.Current.DisplayAlert("Abort Session", "Are you sure you want to end this review session early?", "Yes, Abort", "No, Continue");
             if (!confirm) return;
-            await Shell.Current.GoToAsync(nameof(DeckListPage)); // Go back deck list
+            await Shell.Current.GoToAsync("//"+nameof(DeckListPage)); // Go back deck list
         }
     }
 }

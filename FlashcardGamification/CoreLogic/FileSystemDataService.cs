@@ -201,7 +201,7 @@ namespace FlashcardGamification.CoreLogic
             else
             {
                 Console.WriteLine($"Error adding card: Deck {deckId} not found.");
-                throw new KeyNotFoundException($"Deck with ID {deckId} not found."); // Be more explicit
+                throw new KeyNotFoundException($"Deck with ID {deckId} not found."); 
             }
         }
 

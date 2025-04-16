@@ -13,18 +13,18 @@
 
 			<ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" Margin="0,0,0,10"/>
 
+            <Label Text="Welcome Back!" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center"/>
+            
 			<Label Text="Overall Progress" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center"/>
 
 			<!-- Stat Card -->
 			<Border Style="{StaticResource CardView}">
-				<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="{StaticResource SmallSpacing}" ColumnSpacing="{StaticResource MediumSpacing}">
-					<Label Grid.Row="0" Grid.Column="1" Text="Level" FontSize="Small" TextColor="{StaticResource MidGrayColor}"/>
-					<Label Grid.Row="1" Grid.Column="1" Text="{Binding CurrentUser.Level}" FontSize="Large" FontAttributes="Bold"/>
-					<Label Grid.Row="2" Grid.Column="0" Text="XP:" FontAttributes="Bold" VerticalOptions="Center"/>
-					<HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="{StaticResource SmallSpacing}" VerticalOptions="Center">
-						<Label Text="{Binding CurrentUser.XP}" FontSize="Medium" VerticalOptions="Center"/>
-					</HorizontalStackLayout>
-				</Grid>
+				<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="{StaticResource SmallSpacing}" ColumnSpacing="{StaticResource MediumSpacing}">
+					<Label Grid.Row="0" Grid.Column="0" Text="Level" FontSize="Small" VerticalOptions="Center" TextColor="{StaticResource MidGrayColor}"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentUser.Level}" VerticalOptions="Center" FontSize="Large" FontAttributes="Bold"/>
+					<Label Grid.Row="1" Grid.Column="0" Text="XP:" FontAttributes="Bold" VerticalOptions="Center"/>
+                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding CurrentUser.XP}" FontSize="Medium" VerticalOptions="Center"/>
+                </Grid>
 			</Border>
 
 			<!-- Streak Card -->

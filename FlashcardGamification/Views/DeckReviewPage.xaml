@@ -15,8 +15,7 @@
     </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="{StaticResource PagePadding}" RowSpacing="{StaticResource MediumSpacing}"
-          MaximumWidthRequest="800"
-          HorizontalOptions="Center">
+          MaximumWidthRequest="800" HorizontalOptions="Center">
 
         <ActivityIndicator Grid.Row="0" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" />
 
@@ -31,23 +30,30 @@
         <Grid Grid.Row="2"
                 Style="{StaticResource CardView}"
                 Padding="{StaticResource LargeSpacing}">
-            <ScrollView VerticalOptions="Center" Grid.Row="0">
-                <VerticalStackLayout Spacing="{StaticResource LargeSpacing}" IsVisible="{Binding IsSessionComplete, Converter={StaticResource InverseBoolConverter}}">
-                    <!-- Front -->
-                    <VerticalStackLayout>
-                        <Label Text="FRONT" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource MidGrayColor}"/>
-                        <Label Text="{Binding DisplayQuestion}" FontSize="Title" HeightRequest="100"/>
-                    </VerticalStackLayout>
+            <Grid RowDefinitions="Auto, *, Auto, Auto, *" RowSpacing="{StaticResource SmallSpacing}"
+                  IsVisible="{Binding IsSessionComplete, Converter={StaticResource InverseBoolConverter}}">
 
-                    <BoxView HeightRequest="1" Color="{StaticResource CardBorderColor}" Margin="0,10"/>
+                <!-- Front Section -->
+                <Label Grid.Row="0" Text="FRONT" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource MidGrayColor}"/>
+                <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand" VerticalScrollBarVisibility="Default">
+                    <Label Text="{Binding DisplayQuestion}"
+                           FontSize="Large"
+                           LineBreakMode="WordWrap" />
+                </ScrollView>
 
-                    <!-- Back (conditionally visible) -->
-                    <VerticalStackLayout IsVisible="{Binding IsAnswerVisible}">
-                        <Label Text="BACK" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource MidGrayColor}"/>
-                        <Label Text="{Binding DisplayAnswer}" FontSize="Title" HeightRequest="100"/>
-                    </VerticalStackLayout>
+                <BoxView Grid.Row="2" HeightRequest="1" Color="{StaticResource CardBorderColor}" Margin="0,10"/>
+
+                <!-- Back Section (conditionally visible) -->
+                <VerticalStackLayout Grid.Row="3" Grid.RowSpan="2" IsVisible="{Binding IsAnswerVisible}" Spacing="{StaticResource SmallSpacing}">
+                    <Label Grid.Row="3" Text="BACK" FontAttributes="Bold" FontSize="Micro" TextColor="{StaticResource MidGrayColor}"/>
+                    <ScrollView Grid.Row="4" VerticalOptions="FillAndExpand" VerticalScrollBarVisibility="Default">
+                        <Label Text="{Binding DisplayAnswer}"
+                                FontSize="Large"
+                                LineBreakMode="WordWrap" />
+                    </ScrollView>
                 </VerticalStackLayout>
-            </ScrollView>
+
+            </Grid>
 
             <!-- Session Complete Message -->
             <Label Text="Session Complete!"  Grid.Row="1"

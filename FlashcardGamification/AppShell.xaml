@@ -9,19 +9,20 @@
     Title="FlashcardGamification">
 
     <TabBar>
-
-        <ShellContent
+        <Tab Title="Stats">
+            <ShellContent
             Title="Stats"
             ContentTemplate="{DataTemplate views:StatsPage}"
             Icon="dotnet_bot.png"
             Route="StatsPage" />
-        
-        <ShellContent
+        </Tab>
+        <Tab Title="Decks">
+            <ShellContent
             Title="Decks"
             ContentTemplate="{DataTemplate views:DeckListPage}"
             Icon="dotnet_bot.png" 
             Route="DeckListPage" />
-
+         </Tab>
     </TabBar>
 
 </Shell>
