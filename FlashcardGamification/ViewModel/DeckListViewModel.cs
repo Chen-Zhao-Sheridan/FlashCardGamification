@@ -16,11 +16,14 @@ namespace FlashcardGamification.ViewModel
         [ObservableProperty]
         ObservableCollection<Deck> decks;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_IsLoading"/>
         [ObservableProperty]
         bool isLoading;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_IsNotLoading"/>
         public bool IsNotLoading => !IsBusy;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_ctor"/>
         public DeckListViewModel(IDataService dataService)
         {
             _dataService = dataService;
@@ -28,6 +31,7 @@ namespace FlashcardGamification.ViewModel
             Decks = new ObservableCollection<Deck>();
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_LoadDecksAsync"/>
         [RelayCommand]
         async Task LoadDecksAsync()
         {
@@ -55,6 +59,7 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_GoToCreateDeckAsync"/>
         [RelayCommand]
         async Task GoToCreateDeckAsync()
         {
@@ -62,6 +67,7 @@ namespace FlashcardGamification.ViewModel
             await Shell.Current.GoToAsync($"{nameof(DeckDetailPage)}?DeckId=");
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_GoToDeckDetailsAsync"/>
         [RelayCommand]
         async Task GoToDeckDetailsAsync(Deck deck)
         {
@@ -71,6 +77,7 @@ namespace FlashcardGamification.ViewModel
             await Shell.Current.GoToAsync($"{nameof(DeckDetailPage)}?DeckId={deck.Id}");
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_StartReviewAsync"/>
         [RelayCommand]
         async Task StartReviewAsync(Deck deck)
         {
@@ -78,6 +85,7 @@ namespace FlashcardGamification.ViewModel
         }
 
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_DeleteDeckAsync"/>
         [RelayCommand]
         async Task DeleteDeckAsync(Deck deck)
         {
@@ -100,6 +108,7 @@ namespace FlashcardGamification.ViewModel
         }
 
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_OnAppearing"/>
         public void OnAppearing()
         {
             if (!IsLoading)

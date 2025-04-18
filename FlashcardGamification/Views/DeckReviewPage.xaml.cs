@@ -3,9 +3,11 @@ using FlashcardGamification.ViewModel;
 
 namespace FlashcardGamification.Views
 {
+    /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewPage"/>
     public partial class DeckReviewPage : ContentPage
     {
         private readonly DeckReviewViewModel _viewModel;
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewPage_ctor"/>
         public DeckReviewPage(DeckReviewViewModel viewModel)
         {
             InitializeComponent();
@@ -13,6 +15,7 @@ namespace FlashcardGamification.Views
             BindingContext = _viewModel;
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewPage_OnBackButtonPressed"/>
         protected override bool OnBackButtonPressed()
         {
             // If the session is not complete, ask for confirmation

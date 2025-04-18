@@ -9,6 +9,7 @@ using FlashcardGamification.CoreLogic.Models;
 
 namespace FlashcardGamification.CoreLogic
 {
+    /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService"/>
     public class FileSystemDataService : IDataService
     {
         private readonly string _dataDirectory;
@@ -17,6 +18,7 @@ namespace FlashcardGamification.CoreLogic
         private const string DeckFileExtension = ".json";
         private readonly string _userProfileFile;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_ctor"/>
         public FileSystemDataService()
         {
             _dataDirectory = FileSystem.AppDataDirectory;
@@ -33,6 +35,7 @@ namespace FlashcardGamification.CoreLogic
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_GetDeckFilePath"/>
         private string GetDeckFilePath(Guid deckId)
         {
             return Path.Combine(_dataDirectory, $"{DeckFilePrefix}{deckId}{DeckFileExtension}");
@@ -40,6 +43,7 @@ namespace FlashcardGamification.CoreLogic
 
         // User Operations
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_GetUserAsync"/>
         public async Task<User> GetUserAsync()
         {
             if (!File.Exists(_userProfileFile))
@@ -94,6 +98,7 @@ namespace FlashcardGamification.CoreLogic
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_SaveUserAsync"/>
         public async Task SaveUserAsync(User user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
@@ -118,6 +123,7 @@ namespace FlashcardGamification.CoreLogic
 
         // Deck Operations
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_GetAllDecksAsync"/>
         public async Task<IEnumerable<Deck>> GetAllDecksAsync()
         {
             var deckFiles = Directory.EnumerateFiles(_dataDirectory, $"{DeckFilePrefix}*{DeckFileExtension}");
@@ -150,6 +156,7 @@ namespace FlashcardGamification.CoreLogic
             return decks.OrderBy(d => d.Name); // Example sorting
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_GetDeckAsync"/>
         public async Task<Deck> GetDeckAsync(Guid deckId)
         {
             string filePath = GetDeckFilePath(deckId);
@@ -162,6 +169,7 @@ namespace FlashcardGamification.CoreLogic
             catch (Exception ex) { Console.WriteLine($"Error reading deck file {filePath}: {ex.Message}"); return null; }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_SaveDeckAsync"/>
         public async Task SaveDeckAsync(Deck deck)
         {
             if (deck == null) throw new ArgumentNullException(nameof(deck));
@@ -176,6 +184,7 @@ namespace FlashcardGamification.CoreLogic
             catch (Exception ex) { Console.WriteLine($"Error writing deck file {filePath}: {ex.Message}"); throw; }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_DeleteDeckAsync"/>
         public Task DeleteDeckAsync(Guid deckId)
         {
             string filePath = GetDeckFilePath(deckId);
@@ -189,6 +198,8 @@ namespace FlashcardGamification.CoreLogic
         }
 
         // Card Operations
+
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_AddCardToDeckAsync"/>
         public async Task AddCardToDeckAsync(Guid deckId, Card card)
         {
             var deck = await GetDeckAsync(deckId);
@@ -205,6 +216,7 @@ namespace FlashcardGamification.CoreLogic
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_UpdateCardInDeckAsync"/>
         public async Task UpdateCardInDeckAsync(Guid deckId, Card card)
         {
             var deck = await GetDeckAsync(deckId);
@@ -232,6 +244,7 @@ namespace FlashcardGamification.CoreLogic
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/FileSystemDataService_DeleteCardFromDeckAsync"/>
         public async Task DeleteCardFromDeckAsync(Guid deckId, Guid cardId)
         {
             var deck = await GetDeckAsync(deckId);

@@ -8,6 +8,7 @@ using FlashcardGamification.Views;
 
 namespace FlashcardGamification.ViewModel
 {
+    /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel"/>
     [QueryProperty(nameof(DeckIdString), "DeckId")]
     public partial class DeckReviewViewModel : BaseViewModel
     {
@@ -20,32 +21,42 @@ namespace FlashcardGamification.ViewModel
         private int _sessionTotalReviewed;
         private Guid _deckId;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_DeckIdString"/>
         [ObservableProperty]
         string deckIdString;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_CurrentCard"/>
         [ObservableProperty]
         Card currentCard;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_DisplayQuestion"/>
         [ObservableProperty]
         string displayQuestion;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_DisplayAnswer"/>
         [ObservableProperty]
         string displayAnswer;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_IsAnswerVisible"/>
         [ObservableProperty]
         bool isAnswerVisible;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_ProgressText"/>
         [ObservableProperty]
         string progressText;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_IsSessionComplete"/>
         [ObservableProperty]
         bool isSessionComplete;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_IsLoading"/>
         [ObservableProperty]
         bool isLoading = true;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_IsNotLoading"/>
         public bool IsNotLoading => !IsLoading;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_ctor"/>
         public DeckReviewViewModel(IDataService dataService)
         {
             _dataService = dataService;
@@ -53,6 +64,7 @@ namespace FlashcardGamification.ViewModel
             _sessionCards = new List<Card>();
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_OnDeckIdStringChanged"/>
         async partial void OnDeckIdStringChanged(string value)
         {
             if (Guid.TryParse(value, out _deckId) && _deckId != Guid.Empty)
@@ -67,6 +79,7 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_LoadReviewSessionAsync"/>
         private async Task LoadReviewSessionAsync()
         {
             if (_deckId == Guid.Empty) return;
@@ -115,6 +128,7 @@ namespace FlashcardGamification.ViewModel
         }
 
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_FlipCard"/>
         [RelayCommand]
         private void FlipCard()
         {
@@ -122,6 +136,7 @@ namespace FlashcardGamification.ViewModel
             IsAnswerVisible = !IsAnswerVisible;
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_SubmitAnswerAsync"/>
         [RelayCommand]
         private async Task SubmitAnswerAsync(string wasCorrectString)
         {
@@ -156,6 +171,7 @@ namespace FlashcardGamification.ViewModel
             ShowNextCard();
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_ShowNextCard"/>
         private async void ShowNextCard() 
         {
             _currentCardIndex++;
@@ -178,6 +194,7 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_CompleteSessionAsync"/>
         private async Task CompleteSessionAsync()
         {
             if (_currentUser == null) return;
@@ -214,6 +231,7 @@ namespace FlashcardGamification.ViewModel
             await Shell.Current.GoToAsync(nameof(ResultsPage), results);
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckReviewViewModel_AbortSessionAsync"/>
         [RelayCommand]
         async Task AbortSessionAsync()
         {
