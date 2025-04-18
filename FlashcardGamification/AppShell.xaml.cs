@@ -2,8 +2,10 @@
 
 namespace FlashcardGamification
 {
+    /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/AppShell"/>
     public partial class AppShell : Shell
     {
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/AppShell_ctor"/>
         public AppShell()
         {
             InitializeComponent();

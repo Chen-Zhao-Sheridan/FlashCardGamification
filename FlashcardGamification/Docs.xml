@@ -1,0 +1,1091 @@
+﻿<?xml version="1.0"?>
+<docs>
+	<members name="FlashcardGamification">
+
+		<App>
+			<summary>
+				Represents the main application class for the Flashcard Gamification app.
+			</summary>
+			<remarks>
+				Initializes the application and sets up the main window with the AppShell.
+			</remarks>
+		</App>
+		<App_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="App"/> class.
+			</summary>
+			<remarks>
+				Calls `InitializeComponent()` to load the XAML definitions for the application.
+			</remarks>
+		</App_ctor>
+		<App_CreateWindow>
+			<summary>
+				Creates the main window for the application.
+			</summary>
+			<param name="activationState">The activation state information.</param>
+			<returns>
+				A new <see cref="Window"/> instance containing the <see cref="AppShell"/>.
+			</returns>
+			<remarks>
+				This method is called by the MAUI framework to instantiate the application's primary window.
+			</remarks>
+		</App_CreateWindow>
+
+		<AppShell>
+			<summary>
+				Defines the shell structure and navigation routing for the application.
+			</summary>
+			<remarks>
+				Registers routes for various pages used within the application, enabling navigation between them.
+			</remarks>
+		</AppShell>
+		<AppShell_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="AppShell"/> class.
+			</summary>
+			<remarks>
+				Calls `InitializeComponent()` and registers navigation routes using <c>Routing.RegisterRoute</c>.
+			</remarks>
+		</AppShell_ctor>
+
+		<FlipTextConverter>
+			<summary>
+				Converts a boolean value representing answer visibility to button text ("Show Answer" or "Hide Answer").
+			</summary>
+			<remarks>
+				Used in XAML bindings to dynamically change button text based on the state of answer visibility in the review page. Implements <c>IValueConverter</c>.
+			</remarks>
+		</FlipTextConverter>
+		<FlipTextConverter_Convert>
+			<summary>
+				Converts a boolean to display text.
+			</summary>
+			<param name="value">The boolean value (true if answer is visible).</param>
+			<param name="targetType">The type of the binding target property (not used).</param>
+			<param name="parameter">The converter parameter (not used).</param>
+			<param name="culture">The culture to use in the converter (not used).</param>
+			<returns>
+				"Hide Answer" if value is true, otherwise "Show Answer".
+			</returns>
+		</FlipTextConverter_Convert>
+		<FlipTextConverter_ConvertBack>
+			<summary>
+				Converting back from text to boolean is not supported.
+			</summary>
+			<exception cref="System.NotImplementedException">
+				Always thrown as this conversion is not implemented.
+			</exception>
+		</FlipTextConverter_ConvertBack>
+
+		<InverseBoolConverter>
+			<summary>
+				Inverts a boolean value.
+			</summary>
+			<remarks>
+				Useful in XAML bindings to bind a property to the inverse of a boolean source property. Implements <c>IValueConverter</c>.
+			</remarks>
+		</InverseBoolConverter>
+		<InverseBoolConverter_Convert>
+			<summary>
+				Converts a boolean value to its inverse.
+			</summary>
+			<param name="value">The boolean value to invert.</param>
+			<param name="targetType">The type of the binding target property (not used).</param>
+			<param name="parameter">The converter parameter (not used).</param>
+			<param name="culture">The culture to use in the converter (not used).</param>
+			<returns>
+				The inverse of the input boolean value. Returns false if the input is not a boolean.
+			</returns>
+		</InverseBoolConverter_Convert>
+		<InverseBoolConverter_ConvertBack>
+			<summary>
+				Converts an inverted boolean value back to its original value.
+			</summary>
+			<param name="value">The boolean value to invert.</param>
+			<param name="targetType">The type of the binding target property (not used).</param>
+			<param name="parameter">The converter parameter (not used).</param>
+			<param name="culture">The culture to use in the converter (not used).</param>
+			<returns>
+				The inverse of the input boolean value. Returns false if the input is not a boolean.
+			</returns>
+		</InverseBoolConverter_ConvertBack>
+
+		<FileSystemDataService>
+			<summary>
+				Implements the <see cref="IDataService"/> interface using the local file system for data persistence.
+			</summary>
+			<remarks>
+				Manages decks and user profiles by storing them as JSON files in the application's data directory.
+			</remarks>
+		</FileSystemDataService>
+		<FileSystemDataService_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="FileSystemDataService"/> class.
+			</summary>
+			<remarks>
+				Sets up the data directory path, user profile file path, and JSON serializer options. Creates the data directory if it doesn't exist.
+			</remarks>
+		</FileSystemDataService_ctor>
+		<FileSystemDataService_GetDeckFilePath>
+			<summary>
+				Constructs the full file path for a deck based on its ID.
+			</summary>
+			<param name="deckId">The unique identifier of the deck.</param>
+			<returns>
+				The full path to the deck's JSON file.
+			</returns>
+		</FileSystemDataService_GetDeckFilePath>
+		<FileSystemDataService_GetUserAsync>
+			<summary>
+				Retrieves the user profile from the file system.
+			</summary>
+			<returns>
+				A task that represents the asynchronous operation. The task result contains the loaded <see cref="User"/> object. If the profile file doesn't exist or is invalid, a new default user profile is created, saved, and returned.
+			</returns>
+			<remarks>
+				Handles file existence checks, deserialization, and error handling (e.g., empty file, invalid JSON, empty UserId).
+			</remarks>
+		</FileSystemDataService_GetUserAsync>
+		<FileSystemDataService_SaveUserAsync>
+			<summary>
+				Saves the specified user profile to the file system as a JSON file.
+			</summary>
+			<param name="user">
+				The <see cref="User"/> object to save.
+			</param>
+			<returns>
+				A task that represents the asynchronous save operation.
+			</returns>
+			<exception cref="System.ArgumentNullException">
+				Thrown if the provided <paramref name="user"/> is null.
+			</exception>
+			<remarks>
+				Serializes the user object to JSON and writes it to the predefined user profile file path. Assigns a new Guid if the UserId is empty.
+			</remarks>
+		</FileSystemDataService_SaveUserAsync>
+		<FileSystemDataService_GetAllDecksAsync>
+			<summary>
+				Retrieves all deck files from the data directory.
+			</summary>
+			<returns>
+				A task that represents the asynchronous operation. The task result contains an enumerable collection of all loaded <see cref="Deck"/> objects, ordered by name.
+			</returns>
+			<remarks>
+				Enumerates files matching the deck file pattern, deserializes each valid JSON file into a <see cref="Deck"/> object, and handles potential exceptions during file reading or deserialization.
+			</remarks>
+		</FileSystemDataService_GetAllDecksAsync>
+		<FileSystemDataService_GetDeckAsync>
+			<summary>
+				Retrieves a specific deck by its ID from the file system.
+			</summary>
+			<param name="deckId">The unique identifier of the deck to retrieve.</param>
+			<returns>
+				A task that represents the asynchronous operation. The task result contains the loaded <see cref="Deck"/> object, or null if the deck file doesn't exist or an error occurs.
+			</returns>
+		</FileSystemDataService_GetDeckAsync>
+		<FileSystemDataService_SaveDeckAsync>
+			<summary>
+				Saves the specified deck to the file system as a JSON file.
+			</summary>
+			<param name="deck">
+				The <see cref="Deck"/> object to save.
+			</param>
+			<returns>
+				A task that represents the asynchronous save operation.
+			</returns>
+			<exception cref="System.ArgumentNullException">
+				Thrown if the provided <paramref name="deck"/> is null.
+			</exception>
+			<remarks>
+				Ensures all cards within the deck have a valid ID before serialization. Serializes the deck object to JSON and writes it to the corresponding deck file path.
+			</remarks>
+		</FileSystemDataService_SaveDeckAsync>
+		<FileSystemDataService_DeleteDeckAsync>
+			<summary>
+				Deletes the JSON file associated with the specified deck ID from the file system.
+			</summary>
+			<param name="deckId">The unique identifier of the deck to delete.</param>
+			<returns>
+				A task that represents the asynchronous delete operation.
+			</returns>
+			<remarks>
+				Checks if the file exists before attempting deletion and handles potential exceptions.
+			</remarks>
+		</FileSystemDataService_DeleteDeckAsync>
+		<FileSystemDataService_AddCardToDeckAsync>
+			<summary>
+				Adds a card to the specified deck and saves the updated deck.
+			</summary>
+			<param name="deckId">The ID of the deck to add the card to.</param>
+			<param name="card">
+				The <see cref="Card"/> object to add.
+			</param>
+			<returns>
+				A task that represents the asynchronous operation.
+			</returns>
+			<exception cref="System.Collections.Generic.KeyNotFoundException">
+				Thrown if the deck with the specified <paramref name="deckId"/> is not found.
+			</exception>
+			<remarks>
+				Retrieves the deck, adds the card (assigning a new ID if necessary), and saves the entire deck back to the file system.
+			</remarks>
+		</FileSystemDataService_AddCardToDeckAsync>
+		<FileSystemDataService_UpdateCardInDeckAsync>
+			<summary>
+				Updates an existing card within a specific deck and saves the updated deck.
+			</summary>
+			<param name="deckId">The ID of the deck containing the card.</param>
+			<param name="card">
+				The <see cref="Card"/> object with updated information. The ID must match an existing card in the deck.
+			</param>
+			<returns>
+				A task that represents the asynchronous operation.
+			</returns>
+			<exception cref="System.Collections.Generic.KeyNotFoundException">
+				Thrown if the deck with the specified <paramref name="deckId"/> is not found, or if the card with the specified ID is not found within that deck.
+			</exception>
+			<remarks>
+				Retrieves the deck, finds the existing card by ID, updates its properties, and saves the entire deck back to the file system.
+			</remarks>
+		</FileSystemDataService_UpdateCardInDeckAsync>
+		<FileSystemDataService_DeleteCardFromDeckAsync>
+			<summary>
+				Deletes a card from the specified deck and saves the updated deck.
+			</summary>
+			<param name="deckId">The ID of the deck containing the card.</param>
+			<param name="cardId">The ID of the card to delete.</param>
+			<returns>
+				A task that represents the asynchronous operation.
+			</returns>
+			<exception cref="System.Collections.Generic.KeyNotFoundException">
+				Thrown if the deck with the specified <paramref name="deckId"/> is not found.
+			</exception>
+			<remarks>
+				Retrieves the deck, removes the card matching the <paramref name="cardId"/>, and saves the entire deck back to the file system. Does nothing if the card is not found within the deck.
+			</remarks>
+		</FileSystemDataService_DeleteCardFromDeckAsync>
+
+		<IDataService>
+			<summary>
+				Defines the contract for data persistence operations within the application.
+			</summary>
+			<remarks>
+				Provides methods for managing decks, cards within decks, and user profiles.
+			</remarks>
+		</IDataService>
+		<IDataService_GetAllDecksAsync>
+			<summary>
+				Asynchronously retrieves all decks.
+			</summary>
+			<returns>
+				A task that returns an enumerable collection of <see cref="Deck"/> objects.
+			</returns>
+		</IDataService_GetAllDecksAsync>
+		<IDataService_GetDeckAsync>
+			<summary>
+				Asynchronously retrieves a specific deck by its ID.
+			</summary>
+			<param name="deckId">The unique identifier of the deck.</param>
+			<returns>
+				A task that returns the <see cref="Deck"/> object, or null if not found.
+			</returns>
+		</IDataService_GetDeckAsync>
+		<IDataService_SaveDeckAsync>
+			<summary>
+				Asynchronously saves a deck (either creating a new one or updating an existing one).
+			</summary>
+			<param name="deck">
+				The <see cref="Deck"/> object to save.
+			</param>
+			<returns>A task representing the save operation.</returns>
+		</IDataService_SaveDeckAsync>
+		<IDataService_DeleteDeckAsync>
+			<summary>
+				Asynchronously deletes a deck by its ID.
+			</summary>
+			<param name="deckId">The unique identifier of the deck to delete.</param>
+			<returns>A task representing the delete operation.</returns>
+		</IDataService_DeleteDeckAsync>
+		<IDataService_AddCardToDeckAsync>
+			<summary>
+				Asynchronously adds a new card to a specified deck.
+			</summary>
+			<param name="deckId">The ID of the deck to add the card to.</param>
+			<param name="card">
+				The <see cref="Card"/> object to add.
+			</param>
+			<returns>A task representing the add operation.</returns>
+		</IDataService_AddCardToDeckAsync>
+		<IDataService_UpdateCardInDeckAsync>
+			<summary>
+				Asynchronously updates an existing card within a specified deck.
+			</summary>
+			<param name="deckId">The ID of the deck containing the card.</param>
+			<param name="card">
+				The <see cref="Card"/> object with updated information.
+			</param>
+			<returns>A task representing the update operation.</returns>
+		</IDataService_UpdateCardInDeckAsync>
+		<IDataService_DeleteCardFromDeckAsync>
+			<summary>
+				Asynchronously deletes a card from a specified deck.
+			</summary>
+			<param name="deckId">The ID of the deck containing the card.</param>
+			<param name="cardId">The ID of the card to delete.</param>
+			<returns>A task representing the delete operation.</returns>
+		</IDataService_DeleteCardFromDeckAsync>
+		<IDataService_GetUserAsync>
+			<summary>
+				Asynchronously retrieves the current user's profile.
+			</summary>
+			<returns>
+				A task that returns the <see cref="User"/> object.
+			</returns>
+		</IDataService_GetUserAsync>
+		<IDataService_SaveUserAsync>
+			<summary>
+				Asynchronously saves the user's profile.
+			</summary>
+			<param name="user">
+				The <see cref="User"/> object to save.
+			</param>
+			<returns>A task representing the save operation.</returns>
+		</IDataService_SaveUserAsync>
+
+		<Card>
+			<summary>
+				Represents a single flashcard with front and back content, and review statistics.
+			</summary>
+		</Card>
+		<Card_Id>
+			<summary>Gets or sets the unique identifier for the card.</summary>
+		</Card_Id>
+		<Card_FrontContent>
+			<summary>Gets or sets the content displayed on the front of the card (e.g., question).</summary>
+		</Card_FrontContent>
+		<Card_BackContent>
+			<summary>Gets or sets the content displayed on the back of the card (e.g., answer).</summary>
+		</Card_BackContent>
+		<Card_LastReviewed>
+			<summary>Gets or sets the date and time when this card was last reviewed.</summary>
+		</Card_LastReviewed>
+		<Card_CorrectStreak>
+			<summary>Gets or sets the number of consecutive times this card was answered correctly.</summary>
+		</Card_CorrectStreak>
+		<Card_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="Card"/> class with default values.
+			</summary>
+			<remarks>
+				Assigns a new unique <see cref="Id"/>, sets <see cref="LastReviewed"/> to <c>DateTime.MinValue</c>, and initializes content strings to empty.
+			</remarks>
+		</Card_ctor>
+
+		<Deck>
+			<summary>
+				Represents a collection of flashcards (<see cref="Card"/>).
+			</summary>
+		</Deck>
+		<Deck_Id>
+			<summary>Gets or sets the unique identifier for the deck.</summary>
+		</Deck_Id>
+		<Deck_Name>
+			<summary>Gets or sets the name of the deck.</summary>
+		</Deck_Name>
+		<Deck_Cards>
+			<summary>
+				Gets or sets the list of <see cref="Card"/> objects belonging to this deck.
+			</summary>
+		</Deck_Cards>
+		<Deck_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="Deck"/> class with default values.
+			</summary>
+			<remarks>
+				Assigns a new unique <see cref="Id"/>, sets the default <see cref="Name"/> to "New Deck", and initializes the <see cref="Cards"/> list.
+			</remarks>
+		</Deck_ctor>
+
+		<User>
+			<summary>
+				Represents the application user and stores their progress and gamification statistics.
+			</summary>
+		</User>
+		<User_UserId>
+			<summary>Gets or sets the unique identifier for the user.</summary>
+		</User_UserId>
+		<User_XP>
+			<summary>Gets or sets the user's experience points.</summary>
+		</User_XP>
+		<User_Level>
+			<summary>Gets or sets the user's current level.</summary>
+		</User_Level>
+		<User_CurrentDailyStreak>
+			<summary>Gets or sets the user's current daily review streak.</summary>
+		</User_CurrentDailyStreak>
+		<User_LongestDailyStreak>
+			<summary>Gets or sets the user's longest recorded daily review streak.</summary>
+		</User_LongestDailyStreak>
+		<User_TotalCorrectAnswers>
+			<summary>Gets or sets the total number of cards answered correctly across all sessions.</summary>
+		</User_TotalCorrectAnswers>
+		<User_TotalSessionsCompleted>
+			<summary>Gets or sets the total number of review sessions completed.</summary>
+		</User_TotalSessionsCompleted>
+		<User_LastSessionDate>
+			<summary>Gets or sets the date and time of the user's last completed review session.</summary>
+		</User_LastSessionDate>
+		<User_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="User"/> class with default values.
+			</summary>
+			<remarks>
+				Sets <see cref="UserId"/> to <c>Guid.Empty</c> initially, and all statistics (XP, Level, Streaks, etc.) to their starting values (0 or 1 for Level, MinValue for LastSessionDate).
+			</remarks>
+		</User_ctor>
+
+		<BaseViewModel>
+			<summary>
+				Provides base functionality for view models, including property change notification and busy state management.
+			</summary>
+			<remarks>
+				Inherits from <c>ObservableObject</c> from the CommunityToolkit.Mvvm library.
+			</remarks>
+		</BaseViewModel>
+		<BaseViewModel_IsBusy>
+			<summary>Gets or sets a value indicating whether the view model is currently performing an operation.</summary>
+			<remarks>
+				Also notifies that the <see cref="IsNotBusy"/> property has changed.
+			</remarks>
+		</BaseViewModel_IsBusy>
+		<BaseViewModel_Title>
+			<summary>Gets or sets the title associated with the view model, often used for page titles.</summary>
+		</BaseViewModel_Title>
+		<BaseViewModel_IsNotBusy>
+			<summary>Gets a value indicating whether the view model is not currently performing an operation.</summary>
+			<remarks>
+				This is the inverse of the <see cref="IsBusy"/> property.
+			</remarks>
+		</BaseViewModel_IsNotBusy>
+
+		<CardEditViewModel>
+			<summary>
+				View model for the Card Edit Page (<see cref="CardEditPage"/>), responsible for adding new cards or editing existing ones.
+			</summary>
+			<remarks>
+				Receives DeckId and optionally CardId via query parameters. Interacts with <see cref="IDataService"/> to load and save card data.
+			</remarks>
+		</CardEditViewModel>
+		<CardEditViewModel_DeckIdString>
+			<summary>Gets or sets the string representation of the Deck ID passed via navigation.</summary>
+			<remarks>
+				Used internally to set the <c>_deckId</c> field upon parsing.
+			</remarks>
+		</CardEditViewModel_DeckIdString>
+		<CardEditViewModel_CardIdString>
+			<summary>Gets or sets the string representation of the Card ID passed via navigation (if editing).</summary>
+			<remarks>
+				Used internally to set the <c>_cardId</c> field and determine if editing an existing card.
+			</remarks>
+		</CardEditViewModel_CardIdString>
+		<CardEditViewModel_CardFront>
+			<summary>Gets or sets the text content for the front of the card being edited.</summary>
+		</CardEditViewModel_CardFront>
+		<CardEditViewModel_CardBack>
+			<summary>Gets or sets the text content for the back of the card being edited.</summary>
+		</CardEditViewModel_CardBack>
+		<CardEditViewModel_IsEditing>
+			<summary>Gets or sets a value indicating whether the view model is in edit mode (editing an existing card) or add mode (creating a new card).</summary>
+		</CardEditViewModel_IsEditing>
+		<CardEditViewModel_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="CardEditViewModel"/> class.
+			</summary>
+			<param name="dataService">The data service implementation.</param>
+		</CardEditViewModel_ctor>
+		<CardEditViewModel_OnDeckIdStringChanged>
+			<summary>Handles changes to the DeckIdString property, parsing it into a Guid.</summary>
+			<param name="value">The new string value of the Deck ID.</param>
+			<remarks>If parsing fails or the ID is empty, displays an error and navigates back. If valid and CardId is also set, triggers loading the card.</remarks>
+		</CardEditViewModel_OnDeckIdStringChanged>
+		<CardEditViewModel_OnCardIdStringChanged>
+			<summary>Handles changes to the CardIdString property, determining if editing and triggering card load if necessary.</summary>
+			<param name="value">The new string value of the Card ID.</param>
+			<remarks>
+				Sets the <see cref="IsEditing"/> flag and page <see cref="BaseViewModel.Title"/>. If editing and DeckId is valid, triggers loading the card. If not editing, clears fields.
+			</remarks>
+		</CardEditViewModel_OnCardIdStringChanged>
+		<CardEditViewModel_CheckAndLoadCard>
+			<summary>Checks if conditions are met to load an existing card (IsEditing, valid DeckId, valid CardId) and calls LoadCardAsync.</summary>
+		</CardEditViewModel_CheckAndLoadCard>
+		<CardEditViewModel_LoadCardAsync>
+			<summary>
+				Asynchronously loads the details of an existing card from the data service.
+			</summary>
+			<param name="deckId">The ID of the deck containing the card.</param>
+			<param name="cardId">The ID of the card to load.</param>
+			<returns>A task representing the asynchronous operation.</returns>
+			<remarks>
+				Sets the <see cref="CardFront"/> and <see cref="CardBack"/> properties based on the loaded card. Handles errors and navigates back if the card cannot be loaded.
+			</remarks>
+		</CardEditViewModel_LoadCardAsync>
+		<CardEditViewModel_SaveCardAsync>
+			<summary>
+				Asynchronously saves the current card (either creating a new one or updating an existing one).
+			</summary>
+			<returns>A task representing the asynchronous operation.</returns>
+			<remarks>
+				Performs validation (DeckId, non-empty front/back). Calls either <c>AddCardToDeckAsync</c> or <c>UpdateCardInDeckAsync</c> on the data service. Navigates back on success. Displays errors if saving fails.
+			</remarks>
+		</CardEditViewModel_SaveCardAsync>
+		<CardEditViewModel_CancelAsync>
+			<summary>
+				Asynchronously navigates back to the previous page without saving changes.
+			</summary>
+			<returns>A task representing the navigation operation.</returns>
+		</CardEditViewModel_CancelAsync>
+
+		<DeckDetailViewModel>
+			<summary>
+				View model for the Deck Detail/Edit Page (<see cref="DeckDetailPage"/>), responsible for displaying, editing, and managing cards within a specific deck.
+			</summary>
+			<remarks>
+				Receives DeckId via query parameter. If DeckId is provided, it loads the existing deck for editing. If DeckId is empty, it prepares for creating a new deck. Interacts with <see cref="IDataService"/> for deck and card operations.
+			</remarks>
+		</DeckDetailViewModel>
+		<DeckDetailViewModel_DeckIdString>
+			<summary>Gets or sets the string representation of the Deck ID passed via navigation.</summary>
+			<remarks>
+				Used internally to parse and set the <c>_deckId</c> field.
+			</remarks>
+		</DeckDetailViewModel_DeckIdString>
+		<DeckDetailViewModel_DeckName>
+			<summary>Gets or sets the name of the deck being viewed or edited.</summary>
+		</DeckDetailViewModel_DeckName>
+		<DeckDetailViewModel_Cards>
+			<summary>
+				Gets or sets the observable collection of <see cref="Card"/> objects belonging to the current deck.
+			</summary>
+			<remarks>This collection is displayed in the UI.</remarks>
+		</DeckDetailViewModel_Cards>
+		<DeckDetailViewModel_IsEditing>
+			<summary>Gets or sets a value indicating whether the view model is editing an existing deck or creating a new one.</summary>
+		</DeckDetailViewModel_IsEditing>
+		<DeckDetailViewModel_IsLoading>
+			<summary>Gets or sets a value indicating whether the view model is currently loading deck data.</summary>
+		</DeckDetailViewModel_IsLoading>
+		<DeckDetailViewModel_IsNotLoading>
+			<summary>Gets a value indicating whether the view model is not currently loading data.</summary>
+			<remarks>
+				Inverse of <see cref="IsLoading"/>.
+			</remarks>
+		</DeckDetailViewModel_IsNotLoading>
+		<DeckDetailViewModel_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="DeckDetailViewModel"/> class.
+			</summary>
+			<param name="dataService">The data service implementation.</param>
+		</DeckDetailViewModel_ctor>
+		<DeckDetailViewModel_OnDeckIdStringChanged>
+			<summary>Handles changes to the DeckIdString property, determining edit/add mode and loading the deck if necessary.</summary>
+			<param name="value">The new string value of the Deck ID.</param>
+			<remarks>
+				Sets <see cref="IsEditing"/>, <see cref="BaseViewModel.Title"/>, and triggers <see cref="LoadDeckAsync"/> if editing an existing deck. Initializes fields for a new deck otherwise.
+			</remarks>
+		</DeckDetailViewModel_OnDeckIdStringChanged>
+		<DeckDetailViewModel_LoadDeckAsync>
+			<summary>Asynchronously loads the deck details and its associated cards from the data service.</summary>
+			<param name="id">The unique identifier of the deck to load.</param>
+			<returns>A task representing the asynchronous load operation.</returns>
+			<remarks>
+				Populates <see cref="DeckName"/> and the <see cref="Cards"/> collection. Handles errors if the deck cannot be loaded.
+			</remarks>
+		</DeckDetailViewModel_LoadDeckAsync>
+		<DeckDetailViewModel_SaveDeckAsync>
+			<summary>Asynchronously saves the current deck's details (primarily the name) to the data service.</summary>
+			<returns>A task representing the asynchronous save operation.</returns>
+			<remarks>
+				Validates that the <see cref="DeckName"/> is not empty. Calls <c>SaveDeckAsync</c> on the data service. Displays confirmation or error messages.
+			</remarks>
+		</DeckDetailViewModel_SaveDeckAsync>
+		<DeckDetailViewModel_CancelAsync>
+			<summary>Asynchronously navigates back to the previous page without saving changes.</summary>
+			<returns>A task representing the navigation operation.</returns>
+		</DeckDetailViewModel_CancelAsync>
+		<DeckDetailViewModel_GoToAddCardAsync>
+			<summary>Asynchronously navigates to the Card Edit Page to add a new card to the current deck.</summary>
+			<returns>A task representing the navigation operation.</returns>
+			<remarks>
+				Passes the current <c>_deckId</c> as a query parameter.
+			</remarks>
+		</DeckDetailViewModel_GoToAddCardAsync>
+		<DeckDetailViewModel_GoToEditCardAsync>
+			<summary>Asynchronously navigates to the Card Edit Page to edit the specified card.</summary>
+			<param name="card">
+				The <see cref="Card"/> object to edit.
+			</param>
+			<returns>A task representing the navigation operation.</returns>
+			<remarks>
+				Passes the current <c>_deckId</c> and the <paramref name="card"/>'s ID as query parameters.
+			</remarks>
+		</DeckDetailViewModel_GoToEditCardAsync>
+		<DeckDetailViewModel_DeleteCardAsync>
+			<summary>Asynchronously deletes the specified card from the current deck after confirmation.</summary>
+			<param name="card">
+				The <see cref="Card"/> object to delete.
+			</param>
+			<returns>A task representing the asynchronous delete operation.</returns>
+			<remarks>
+				Displays a confirmation dialog. Calls <c>DeleteCardFromDeckAsync</c> on the data service and removes the card from the local <see cref="Cards"/> collection and the <c>_currentDeck</c> object.
+			</remarks>
+		</DeckDetailViewModel_DeleteCardAsync>
+		<DeckDetailViewModel_OnAppearing>
+			<summary>Called when the associated page appears. Refreshes the deck data if necessary.</summary>
+			<remarks>
+				Calls <see cref="LoadDeckAsync"/> if a valid <c>_deckId</c> exists and data is not already loading.
+			</remarks>
+		</DeckDetailViewModel_OnAppearing>
+
+		<DeckListViewModel>
+			<summary>
+				View model for the Deck List Page (<see cref="DeckListPage"/>), responsible for displaying available decks and handling actions like creating, editing, deleting, or reviewing decks.
+			</summary>
+			<remarks>
+				Interacts with <see cref="IDataService"/> to load and delete decks. Provides commands for navigation and deck management.
+			</remarks>
+		</DeckListViewModel>
+		<DeckListViewModel_Decks>
+			<summary>
+				Gets or sets the observable collection of <see cref="Deck"/> objects displayed in the list.
+			</summary>
+		</DeckListViewModel_Decks>
+		<DeckListViewModel_IsLoading>
+			<summary>Gets or sets a value indicating whether the view model is currently loading the list of decks.</summary>
+		</DeckListViewModel_IsLoading>
+		<DeckListViewModel_IsNotLoading>
+			<summary>Gets a value indicating whether the view model is not currently loading decks.</summary>
+			<remarks>
+				Inverse of <see cref="IsLoading"/>.
+			</remarks>
+		</DeckListViewModel_IsNotLoading>
+		<DeckListViewModel_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="DeckListViewModel"/> class.
+			</summary>
+			<param name="dataService">The data service implementation.</param>
+		</DeckListViewModel_ctor>
+		<DeckListViewModel_LoadDecksAsync>
+			<summary>Asynchronously loads all available decks from the data service.</summary>
+			<returns>A task representing the asynchronous load operation.</returns>
+			<remarks>
+				Clears the existing <see cref="Decks"/> collection and populates it with decks retrieved from <c>GetAllDecksAsync</c>. Handles potential errors during loading.
+			</remarks>
+		</DeckListViewModel_LoadDecksAsync>
+		<DeckListViewModel_GoToCreateDeckAsync>
+			<summary>Asynchronously navigates to the Deck Detail Page to create a new deck.</summary>
+			<returns>A task representing the navigation operation.</returns>
+			<remarks>
+				Navigates to <see cref="DeckDetailPage"/> without passing a DeckId.
+			</remarks>
+		</DeckListViewModel_GoToCreateDeckAsync>
+		<DeckListViewModel_GoToDeckDetailsAsync>
+			<summary>Asynchronously navigates to the Deck Detail Page for the specified deck.</summary>
+			<param name="deck">
+				The <see cref="Deck"/> object whose details should be viewed/edited.
+			</param>
+			<returns>A task representing the navigation operation.</returns>
+			<remarks>
+				Navigates to <see cref="DeckDetailPage"/>, passing the <paramref name="deck"/>'s ID as a query parameter.
+			</remarks>
+		</DeckListViewModel_GoToDeckDetailsAsync>
+		<DeckListViewModel_StartReviewAsync>
+			<summary>Asynchronously navigates to the Deck Review Page to start a review session for the specified deck.</summary>
+			<param name="deck">
+				The <see cref="Deck"/> object to review.
+			</param>
+			<returns>A task representing the navigation operation.</returns>
+			<remarks>
+				Navigates to <see cref="DeckReviewPage"/>, passing the <paramref name="deck"/>'s ID as a query parameter.
+			</remarks>
+		</DeckListViewModel_StartReviewAsync>
+		<DeckListViewModel_DeleteDeckAsync>
+			<summary>Asynchronously deletes the specified deck after confirmation.</summary>
+			<param name="deck">
+				The <see cref="Deck"/> object to delete.
+			</param>
+			<returns>A task representing the asynchronous delete operation.</returns>
+			<remarks>
+				Displays a confirmation dialog. Calls <c>DeleteDeckAsync</c> on the data service and removes the deck from the local <see cref="Decks"/> collection.
+			</remarks>
+		</DeckListViewModel_DeleteDeckAsync>
+		<DeckListViewModel_OnAppearing>
+			<summary>Called when the associated page appears. Initiates loading the decks.</summary>
+			<remarks>
+				Executes the <see cref="LoadDecksCommand"/> if not already loading.
+			</remarks>
+		</DeckListViewModel_OnAppearing>
+
+		<DeckReviewViewModel>
+			<summary>
+				View model for the Deck Review Page (<see cref="DeckReviewPage"/>), responsible for managing a flashcard review session.
+			</summary>
+			<remarks>
+				Receives DeckId via query parameter. Loads the deck, shuffles cards, presents them one by one, tracks progress, updates card/user stats via <see cref="IDataService"/>, and navigates to the <see cref="ResultsPage"/> upon completion.
+			</remarks>
+		</DeckReviewViewModel>
+		<DeckReviewViewModel_DeckIdString>
+			<summary>Gets or sets the string representation of the Deck ID for the review session.</summary>
+			<remarks>
+				Used internally to parse and set the <c>_deckId</c> field.
+			</remarks>
+		</DeckReviewViewModel_DeckIdString>
+		<DeckReviewViewModel_CurrentCard>
+			<summary>
+				Gets or sets the currently displayed <see cref="Card"/> during the review session.
+			</summary>
+		</DeckReviewViewModel_CurrentCard>
+		<DeckReviewViewModel_DisplayQuestion>
+			<summary>Gets or sets the text displayed as the question (front of the current card).</summary>
+		</DeckReviewViewModel_DisplayQuestion>
+		<DeckReviewViewModel_DisplayAnswer>
+			<summary>Gets or sets the text displayed as the answer (back of the current card).</summary>
+		</DeckReviewViewModel_DisplayAnswer>
+		<DeckReviewViewModel_IsAnswerVisible>
+			<summary>
+				Gets or sets a value indicating whether the answer (<see cref="DisplayAnswer"/>) is currently visible.
+			</summary>
+		</DeckReviewViewModel_IsAnswerVisible>
+		<DeckReviewViewModel_ProgressText>
+			<summary>Gets or sets the text displaying the current progress within the session (e.g., "Card 5 of 20").</summary>
+		</DeckReviewViewModel_ProgressText>
+		<DeckReviewViewModel_IsSessionComplete>
+			<summary>Gets or sets a value indicating whether the review session has finished.</summary>
+		</DeckReviewViewModel_IsSessionComplete>
+		<DeckReviewViewModel_IsLoading>
+			<summary>Gets or sets a value indicating whether the view model is currently loading the review session data.</summary>
+		</DeckReviewViewModel_IsLoading>
+		<DeckReviewViewModel_IsNotLoading>
+			<summary>Gets a value indicating whether the view model is not currently loading.</summary>
+			<remarks>
+				Inverse of <see cref="IsLoading"/>.
+			</remarks>
+		</DeckReviewViewModel_IsNotLoading>
+		<DeckReviewViewModel_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="DeckReviewViewModel"/> class.
+			</summary>
+			<param name="dataService">The data service implementation.</param>
+		</DeckReviewViewModel_ctor>
+		<DeckReviewViewModel_OnDeckIdStringChanged>
+			<summary>Handles changes to the DeckIdString property, parsing the ID and initiating the session load.</summary>
+			<param name="value">The new string value of the Deck ID.</param>
+			<remarks>
+				If the ID is valid, calls <see cref="LoadReviewSessionAsync"/>. Otherwise, displays an error and navigates back.
+			</remarks>
+		</DeckReviewViewModel_OnDeckIdStringChanged>
+		<DeckReviewViewModel_LoadReviewSessionAsync>
+			<summary>Asynchronously loads the deck and user data, shuffles cards, and prepares the review session.</summary>
+			<returns>A task representing the asynchronous load operation.</returns>
+			<remarks>
+				Retrieves the deck and user, checks for cards, shuffles the cards for the session, and calls <see cref="ShowNextCard"/> to display the first card. Handles errors if the deck is invalid or loading fails.
+			</remarks>
+		</DeckReviewViewModel_LoadReviewSessionAsync>
+		<DeckReviewViewModel_FlipCard>
+			<summary>Toggles the visibility of the answer for the current card.</summary>
+			<remarks>
+				Sets the <see cref="IsAnswerVisible"/> property to its inverse value.
+			</remarks>
+		</DeckReviewViewModel_FlipCard>
+		<DeckReviewViewModel_SubmitAnswerAsync>
+			<summary>Processes the user's response (correct/incorrect) for the current card.</summary>
+			<param name="wasCorrectString">A string ("True" or "False") indicating if the user answered correctly.</param>
+			<returns>A task representing the asynchronous operation.</returns>
+			<remarks>
+				Updates session counters (<c>_sessionTotalReviewed</c>, <c>_sessionCorrectAnswers</c>), user stats (<see cref="User.XP"/>, <see cref="User.TotalCorrectAnswers"/>), and card stats (<see cref="Card.CorrectStreak"/>, <see cref="Card.LastReviewed"/>). Saves the updated card via the data service and calls <see cref="ShowNextCard"/>.
+			</remarks>
+		</DeckReviewViewModel_SubmitAnswerAsync>
+		<DeckReviewViewModel_ShowNextCard>
+			<summary>Displays the next card in the session or completes the session if all cards have been reviewed.</summary>
+			<remarks>
+				Increments the card index, updates <see cref="CurrentCard"/>, <see cref="DisplayQuestion"/>, <see cref="DisplayAnswer"/>, <see cref="ProgressText"/>, and resets <see cref="IsAnswerVisible"/>. If no cards remain, sets <see cref="IsSessionComplete"/> and calls <see cref="CompleteSessionAsync"/>.
+			</remarks>
+		</DeckReviewViewModel_ShowNextCard>
+		<DeckReviewViewModel_CompleteSessionAsync>
+			<summary>Finalizes the session, updates user statistics (streaks, level, session count), saves the user profile, and navigates to the Results page.</summary>
+			<returns>A task representing the asynchronous completion operation.</returns>
+			<remarks>
+				Calculates daily streaks and level progression. Saves the updated <see cref="User"/> object via the data service. Navigates to <see cref="ResultsPage"/>, passing session results as query parameters.
+			</remarks>
+		</DeckReviewViewModel_CompleteSessionAsync>
+		<DeckReviewViewModel_AbortSessionAsync>
+			<summary>Aborts the current review session after confirmation and navigates back to the deck list.</summary>
+			<returns>A task representing the asynchronous abort operation.</returns>
+			<remarks>
+				Displays a confirmation dialog. If confirmed, navigates to the root <see cref="DeckListPage"/>.
+			</remarks>
+		</DeckReviewViewModel_AbortSessionAsync>
+
+		<ResultsViewModel>
+			<summary>
+				View model for the Results Page (<see cref="ResultsPage"/>), responsible for displaying the outcome of a completed review session.
+			</summary>
+			<remarks>
+				Receives session results (score, total reviewed, deck name, deck ID) via query parameters. Provides options to review the same deck again or return to the deck list.
+			</remarks>
+		</ResultsViewModel>
+		<ResultsViewModel_ScoreString>
+			<summary>Gets or sets the string representation of the number of correct answers in the session.</summary>
+			<remarks>
+				Used internally to parse and set the <see cref="Score"/> property.
+			</remarks>
+		</ResultsViewModel_ScoreString>
+		<ResultsViewModel_TotalReviewedString>
+			<summary>Gets or sets the string representation of the total number of cards reviewed in the session.</summary>
+			<remarks>
+				Used internally to parse and set the <see cref="TotalReviewed"/> property.
+			</remarks>
+		</ResultsViewModel_TotalReviewedString>
+		<ResultsViewModel_DeckName>
+			<summary>Gets or sets the name of the deck that was reviewed.</summary>
+		</ResultsViewModel_DeckName>
+		<ResultsViewModel_DeckIdString>
+			<summary>Gets or sets the string representation of the ID of the deck that was reviewed.</summary>
+			<remarks>
+				Used internally to parse and set the <c>_deckId</c> field, enabling the "Review Again" functionality.
+			</remarks>
+		</ResultsViewModel_DeckIdString>
+		<ResultsViewModel_Score>
+			<summary>Gets or sets the number of correctly answered cards in the completed session.</summary>
+		</ResultsViewModel_Score>
+		<ResultsViewModel_TotalReviewed>
+			<summary>Gets or sets the total number of cards reviewed in the completed session.</summary>
+		</ResultsViewModel_TotalReviewed>
+		<ResultsViewModel_ResultSummary>
+			<summary>Gets or sets the formatted text summarizing the session results (e.g., "Deck: French\nScore: 8 / 10 (80%)").</summary>
+		</ResultsViewModel_ResultSummary>
+		<ResultsViewModel_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="ResultsViewModel"/> class.
+			</summary>
+		</ResultsViewModel_ctor>
+		<ResultsViewModel_OnScoreStringChanged>
+			<summary>Handles changes to the ScoreString property, parsing it into the Score property.</summary>
+			<param name="value">The new string value of the score.</param>
+			<remarks>
+				Calls <see cref="UpdateSummary"/> after parsing.
+			</remarks>
+		</ResultsViewModel_OnScoreStringChanged>
+		<ResultsViewModel_OnTotalReviewedStringChanged>
+			<summary>Handles changes to the TotalReviewedString property, parsing it into the TotalReviewed property.</summary>
+			<param name="value">The new string value of the total reviewed count.</param>
+			<remarks>
+				Calls <see cref="UpdateSummary"/> after parsing.
+			</remarks>
+		</ResultsViewModel_OnTotalReviewedStringChanged>
+		<ResultsViewModel_OnDeckNameChanged>
+			<summary>Handles changes to the DeckName property.</summary>
+			<param name="value">The new deck name string.</param>
+			<remarks>
+				Calls <see cref="UpdateSummary"/>.
+			</remarks>
+		</ResultsViewModel_OnDeckNameChanged>
+		<ResultsViewModel_OnDeckIdStringChanged>
+			<summary>Handles changes to the DeckIdString property, parsing it into the _deckId field.</summary>
+			<param name="value">The new string value of the Deck ID.</param>
+			<remarks>
+				Enables or disables the <see cref="ReviewAgainCommand"/> based on successful parsing.
+			</remarks>
+		</ResultsViewModel_OnDeckIdStringChanged>
+		<ResultsViewModel_UpdateSummary>
+			<summary>
+				Updates the <see cref="ResultSummary"/> property based on the current score, total reviewed, and deck name.
+			</summary>
+			<remarks>Calculates and formats the percentage score.</remarks>
+		</ResultsViewModel_UpdateSummary>
+		<ResultsViewModel_ReviewAgainAsync>
+			<summary>Asynchronously navigates back to the Deck Review Page to start a new session for the same deck.</summary>
+			<returns>A task representing the navigation operation.</returns>
+			<remarks>
+				Navigates back using "..?" and passes the <c>_deckId</c>. Command execution is controlled by <see cref="CanReviewAgain"/>.
+			</remarks>
+		</ResultsViewModel_ReviewAgainAsync>
+		<ResultsViewModel_CanReviewAgain>
+			<summary>Determines whether the "Review Again" command can be executed.</summary>
+			<returns>
+				True if a valid <c>_deckId</c> has been parsed; otherwise, false.
+			</returns>
+		</ResultsViewModel_CanReviewAgain>
+		<ResultsViewModel_GoToDeckListAsync>
+			<summary>Asynchronously navigates back to the main Deck List Page.</summary>
+			<returns>A task representing the navigation operation.</returns>
+			<remarks>Navigates to the root using "//" followed by the page name.</remarks>
+		</ResultsViewModel_GoToDeckListAsync>
+
+		<StatsViewModel>
+			<summary>
+				View model for the Stats Page (<see cref="StatsPage"/>), responsible for displaying the user's progress and gamification statistics.
+			</summary>
+			<remarks>
+				Loads the user's profile using <see cref="IDataService"/> and binds the <see cref="User"/> object's properties to the view.
+			</remarks>
+		</StatsViewModel>
+		<StatsViewModel_CurrentUser>
+			<summary>
+				Gets or sets the <see cref="User"/> object containing the statistics to display.
+			</summary>
+		</StatsViewModel_CurrentUser>
+		<StatsViewModel_IsLoading>
+			<summary>Gets or sets a value indicating whether the view model is currently loading user statistics.</summary>
+		</StatsViewModel_IsLoading>
+		<StatsViewModel_IsNotLoading>
+			<summary>Gets a value indicating whether the view model is not currently loading stats.</summary>
+			<remarks>
+				Inverse of <see cref="IsLoading"/>.
+			</remarks>
+		</StatsViewModel_IsNotLoading>
+		<StatsViewModel_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="StatsViewModel"/> class.
+			</summary>
+			<param name="dataService">The data service implementation.</param>
+		</StatsViewModel_ctor>
+		<StatsViewModel_LoadStatsAsync>
+			<summary>Asynchronously loads the user's statistics from the data service.</summary>
+			<returns>A task representing the asynchronous load operation.</returns>
+			<remarks>
+				Calls <c>GetUserAsync</c> on the data service and updates the <see cref="CurrentUser"/> property. Handles potential errors during loading.
+			</remarks>
+		</StatsViewModel_LoadStatsAsync>
+		<StatsViewModel_OnAppearing>
+			<summary>Called when the associated page appears. Initiates loading the user statistics.</summary>
+			<remarks>
+				Runs <see cref="LoadStatsAsync"/> on a background thread.
+			</remarks>
+		</StatsViewModel_OnAppearing>
+
+		<CardEditPage>
+			<summary>
+				Code-behind for the Card Edit Page (CardEditPage.xaml). Provides UI for adding or editing flashcards.
+			</summary>
+			<remarks>
+				Binds to a <see cref="CardEditViewModel"/> instance provided via dependency injection.
+			</remarks>
+		</CardEditPage>
+		<CardEditPage_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="CardEditPage"/> class.
+			</summary>
+			<param name="viewModel">The view model instance to bind to the page's context.</param>
+		</CardEditPage_ctor>
+
+		<DeckDetailPage>
+			<summary>
+				Code-behind for the Deck Detail/Edit Page (DeckDetailPage.xaml). Displays deck details and a list of its cards, allowing editing and management.
+			</summary>
+			<remarks>
+				Binds to a <see cref="DeckDetailViewModel"/> instance provided via dependency injection. Calls the view model's <c>OnAppearing</c> method when the page appears.
+			</remarks>
+		</DeckDetailPage>
+		<DeckDetailPage_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="DeckDetailPage"/> class.
+			</summary>
+			<param name="viewModel">The view model instance to bind to the page's context.</param>
+		</DeckDetailPage_ctor>
+		<DeckDetailPage_OnAppearing>
+			<summary>
+				Overrides the base <c>OnAppearing</c> method to notify the view model.
+			</summary>
+			<remarks>
+				Calls the base method and then invokes <c>_viewModel.OnAppearing()</c>.
+			</remarks>
+		</DeckDetailPage_OnAppearing>
+
+		<DeckListPage>
+			<summary>
+				Code-behind for the Deck List Page (DeckListPage.xaml). Displays a list of available decks and provides options to interact with them.
+			</summary>
+			<remarks>
+				Binds to a <see cref="DeckListViewModel"/> instance provided via dependency injection. Calls the view model's <c>OnAppearing</c> method when the page appears to trigger loading the deck list.
+			</remarks>
+		</DeckListPage>
+		<DeckListPage_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="DeckListPage"/> class.
+			</summary>
+			<param name="viewModel">The view model instance to bind to the page's context.</param>
+		</DeckListPage_ctor>
+		<DeckListPage_OnAppearing>
+			<summary>
+				Overrides the base <c>OnAppearing</c> method to notify the view model.
+			</summary>
+			<remarks>
+				Calls the base method and then invokes <c>_viewModel.OnAppearing()</c>.
+			</remarks>
+		</DeckListPage_OnAppearing>
+
+		<DeckReviewPage>
+			<summary>
+				Code-behind for the Deck Review Page (DeckReviewPage.xaml). Presents the flashcard review interface.
+			</summary>
+			<remarks>
+				Binds to a <see cref="DeckReviewViewModel"/> instance provided via dependency injection. Includes logic to handle the hardware back button press, prompting the user to confirm aborting the session if it's in progress.
+			</remarks>
+		</DeckReviewPage>
+		<DeckReviewPage_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="DeckReviewPage"/> class.
+			</summary>
+			<param name="viewModel">The view model instance to bind to the page's context.</param>
+		</DeckReviewPage_ctor>
+		<DeckReviewPage_OnBackButtonPressed>
+			<summary>Overrides the hardware back button behavior.</summary>
+			<returns>True to prevent default back navigation if the session is in progress and confirmation is needed; otherwise, returns the result of the base method call.</returns>
+			<remarks>
+				If the session is active, displays a confirmation dialog. If the user confirms aborting, it executes the view model's <c>AbortSessionCommand</c>. Otherwise, it prevents back navigation.
+			</remarks>
+		</DeckReviewPage_OnBackButtonPressed>
+
+		<ResultsPage>
+			<summary>
+				Code-behind for the Results Page (ResultsPage.xaml). Displays the results of a completed review session.
+			</summary>
+			<remarks>
+				Binds to a <see cref="ResultsViewModel"/> instance provided via dependency injection. Disables the hardware/shell back button to prevent navigation back to the completed review session.
+			</remarks>
+		</ResultsPage>
+		<ResultsPage_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="ResultsPage"/> class.
+			</summary>
+			<param name="viewModel">The view model instance to bind to the page's context.</param>
+			<remarks>
+				Sets the <c>Shell.BackButtonBehavior</c> to disabled for this page.
+			</remarks>
+		</ResultsPage_ctor>
+
+		<StatsPage>
+			<summary>
+				Code-behind for the Stats Page (StatsPage.xaml). Displays the user's progress and gamification statistics.
+			</summary>
+			<remarks>
+				Binds to a <see cref="StatsViewModel"/> instance provided via dependency injection. Calls the view model's <c>OnAppearing</c> method when the page appears to trigger loading the stats.
+			</remarks>
+		</StatsPage>
+		<StatsPage_ctor>
+			<summary>
+				Initializes a new instance of the <see cref="StatsPage"/> class.
+			</summary>
+			<param name="viewModel">The view model instance to bind to the page's context.</param>
+		</StatsPage_ctor>
+		<StatsPage_OnAppearing>
+			<summary>
+				Overrides the base <c>OnAppearing</c> method to notify the view model.
+			</summary>
+			<remarks>
+				Calls the base method and then invokes <c>_viewModel.OnAppearing()</c>.
+			</remarks>
+		</StatsPage_OnAppearing>
+
+	</members>
+</docs>

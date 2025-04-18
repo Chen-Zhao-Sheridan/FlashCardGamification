@@ -10,6 +10,7 @@ using FlashcardGamification.CoreLogic.Models;
 
 namespace FlashcardGamification.ViewModel
 {
+    /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel"/>
     [QueryProperty(nameof(DeckIdString), "DeckId")]
     [QueryProperty(nameof(CardIdString), "CardId")]
     public partial class CardEditViewModel : BaseViewModel
@@ -17,29 +18,36 @@ namespace FlashcardGamification.ViewModel
         private readonly IDataService _dataService;
         private Card _originalCard; 
         private Guid _deckId;
-        private Guid _cardId; 
+        private Guid _cardId;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_DeckIdString"/>
         [ObservableProperty]
         string deckIdString;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_CardIdString"/>
         [ObservableProperty]
         string cardIdString;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_CardFront"/>
         [ObservableProperty]
         string cardFront;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_CardBack"/>
         [ObservableProperty]
         string cardBack;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_IsEditing"/>
         [ObservableProperty]
         bool isEditing;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_ctor"/>
         public CardEditViewModel(IDataService dataService)
         {
             _dataService = dataService;
             Title = "New Card";
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_OnDeckIdStringChanged"/>
         partial void OnDeckIdStringChanged(string value)
         {
             if (!Guid.TryParse(value, out _deckId) || _deckId == Guid.Empty)
@@ -55,6 +63,7 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_OnCardIdStringChanged"/>
         partial void OnCardIdStringChanged(string value)
         {
             IsEditing = Guid.TryParse(value, out _cardId) && _cardId != Guid.Empty;
@@ -76,6 +85,8 @@ namespace FlashcardGamification.ViewModel
                 _cardId = Guid.Empty; 
             }
         }
+
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_CheckAndLoadCard"/>
         private async void CheckAndLoadCard()
         {
             if (IsEditing && _deckId != Guid.Empty && _cardId != Guid.Empty)
@@ -84,6 +95,7 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_LoadCardAsync"/>
         private async Task LoadCardAsync(Guid deckId, Guid cardId)
         {
             if (IsBusy) return;
@@ -116,6 +128,7 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_SaveCardAsync"/>
         [RelayCommand]
         async Task SaveCardAsync()
         {
@@ -163,6 +176,7 @@ namespace FlashcardGamification.ViewModel
             }
         }
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/CardEditViewModel_CancelAsync"/>
         [RelayCommand]
         async Task CancelAsync()
         {

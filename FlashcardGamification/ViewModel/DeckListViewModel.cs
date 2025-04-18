@@ -7,10 +7,12 @@ using FlashcardGamification.Views;
 
 namespace FlashcardGamification.ViewModel
 {
+    /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel"/>
     public partial class DeckListViewModel : BaseViewModel // Or ObservableObject
     {
         private readonly IDataService _dataService;
 
+        /// <include file="Docs.xml" path="docs/members[@name='FlashcardGamification']/DeckListViewModel_Decks"/>
         [ObservableProperty]
         ObservableCollection<Deck> decks;
 
